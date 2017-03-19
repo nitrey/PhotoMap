@@ -47,9 +47,8 @@ CGFloat headerStackViewHeightConstant = 80.0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setupViewController];
     [self actionGetCurrentUserInfo:nil];
-    [self actionShowCurrentUserMediaInCollection:nil];
+    [self setupViewController];
 }
 
 - (void)setupViewController {
@@ -109,6 +108,7 @@ CGFloat headerStackViewHeightConstant = 80.0;
 - (void)setUser:(PMUser *)user {
     if (![_user.username isEqualToString:user.username]) {
         _user = user;
+        [self updateCounts];
         AALog(@"New user! Username = %@", user.username);
         [self actionGetCurrentUserInfo:nil];
         [[PMImageDownloader sharedDownloader] downloadImage:user.pictureURL completion:^(UIImage *image) {
@@ -158,12 +158,19 @@ CGFloat headerStackViewHeightConstant = 80.0;
                             AALog(@"RESPONSE OBJECT: %@", responseObject);
                             
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                PMUser *user = [[PMUser alloc] initWithInfo:responseObject[@"data"]];
-                                weakSelf.user = user;
-                                [PMServerManager sharedManager].currentUser = user;
-                                if (weakSelf.childVC) {
-                                    [(AbstractPostsViewController *)weakSelf.childVC setUser:[PMServerManager sharedManager].currentUser];
+                                if (!self.serverManager.currentUser) {
+                                    PMUser *user = [[PMUser alloc] initWithInfo:responseObject[@"data"]];
+                                    weakSelf.user = user;
+                                    weakSelf.serverManager.currentUser = user;
+                                } else {
+                                    PMUser *user = [self.serverManager.currentUser updateUserInfo:responseObject[@"data"]];
+                                    weakSelf.user = user;
+                                    weakSelf.serverManager.currentUser = user;
                                 }
+                                if (weakSelf.childVC) {
+                                    [(AbstractPostsViewController *)weakSelf.childVC setUser:weakSelf.serverManager.currentUser];
+                                }
+                                [weakSelf actionShowCurrentUserMediaInCollection:nil];
                                 [weakSelf updateCounts];
                             });
                         }
@@ -174,7 +181,7 @@ CGFloat headerStackViewHeightConstant = 80.0;
 }
 
 - (IBAction)actionShowCurrentUserMediaInCollection:(id)sender {
-    if ([self.childVC isKindOfClass:[PostsCollectionVC class]]) {
+    if ([self.childVC isKindOfClass:[PostsCollectionVC class]] || [PMServerManager sharedManager].currentUser == nil) {
         return;
     }
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
@@ -207,7 +214,7 @@ CGFloat headerStackViewHeightConstant = 80.0;
 }
 
 - (IBAction)actionGetCurrentUserMedia:(UIButton *)sender {
-    if ([self.childVC isKindOfClass:[CurrentUserMediaVC class]]) {
+    if ([self.childVC isKindOfClass:[CurrentUserMediaVC class]] || [PMServerManager sharedManager].currentUser == nil) {
         return;
     }
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
