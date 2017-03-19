@@ -188,81 +188,86 @@
 				1F1F78561E44BB0E00A138CC /* PostMappingOperation.m */,
 			);
 			name = Operations;
+			path = Operations;
 			sourceTree = "<group>";
 		};
 		1F12A3741E0B1FE8009AFF35 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				1F12A3711E0B1A53009AFF35 /* PMServerManager.h */,
-				1F12A3721E0B1A53009AFF35 /* PMServerManager.m */,
 				1F12A3751E0B2004009AFF35 /* PMAccessToken.h */,
 				1F12A3761E0B2004009AFF35 /* PMAccessToken.m */,
+				1F12A3711E0B1A53009AFF35 /* PMServerManager.h */,
+				1F12A3721E0B1A53009AFF35 /* PMServerManager.m */,
 			);
 			name = API;
+			path = API;
 			sourceTree = "<group>";
 		};
 		1F12A3781E0B2038009AFF35 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				1FCC491B1E0B15520035A4F9 /* ViewController.h */,
-				1FCC491C1E0B15520035A4F9 /* ViewController.m */,
+				B86CF1851E7DB14900591276 /* DDMs */,
 				B86CF19D1E7E343E00591276 /* MediaControllers */,
+				B8E1E5EE1E722E1400D730EF /* CommentsVC.h */,
+				B8E1E5EF1E722E1400D730EF /* CommentsVC.m */,
 				B86CF18B1E7DCDA600591276 /* MapViewController.h */,
 				B86CF18C1E7DCDA600591276 /* MapViewController.m */,
 				1F40539D1E0BE6FC0082A2D3 /* PMLoginViewController.h */,
 				1F40539E1E0BE6FC0082A2D3 /* PMLoginViewController.m */,
 				B84857761E70E64000187DF9 /* SinglePostVC.h */,
 				B84857771E70E64000187DF9 /* SinglePostVC.m */,
-				B8E1E5EE1E722E1400D730EF /* CommentsVC.h */,
-				B8E1E5EF1E722E1400D730EF /* CommentsVC.m */,
-				B86CF1851E7DB14900591276 /* DDMs */,
+				1FCC491B1E0B15520035A4F9 /* ViewController.h */,
+				1FCC491C1E0B15520035A4F9 /* ViewController.m */,
 			);
 			name = Controllers;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		1F1F78441E44ABE500A138CC /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				1F7C6DCB1E46023000B9B1D8 /* PostCell.h */,
-				1F7C6DCC1E46023000B9B1D8 /* PostCell.m */,
-				1F7C6DCE1E46031B00B9B1D8 /* PostHeaderCell.h */,
-				1F7C6DCF1E46031B00B9B1D8 /* PostHeaderCell.m */,
-				1F1F78451E44AC3300A138CC /* PostBodyCell.h */,
-				1F1F78461E44AC3300A138CC /* PostBodyCell.m */,
-				1F7C6DD11E46032A00B9B1D8 /* PostFooterCell.h */,
-				1F7C6DD21E46032A00B9B1D8 /* PostFooterCell.m */,
 				1F32FEBD1E58857400D9A507 /* CollectionPhotoCell.h */,
 				1F32FEBE1E58857400D9A507 /* CollectionPhotoCell.m */,
 				B8E1E5F11E722E7200D730EF /* CommentCell.h */,
 				B8E1E5F21E722E7200D730EF /* CommentCell.m */,
+				1F1F78451E44AC3300A138CC /* PostBodyCell.h */,
+				1F1F78461E44AC3300A138CC /* PostBodyCell.m */,
+				1F7C6DCB1E46023000B9B1D8 /* PostCell.h */,
+				1F7C6DCC1E46023000B9B1D8 /* PostCell.m */,
+				1F7C6DD11E46032A00B9B1D8 /* PostFooterCell.h */,
+				1F7C6DD21E46032A00B9B1D8 /* PostFooterCell.m */,
+				1F7C6DCE1E46031B00B9B1D8 /* PostHeaderCell.h */,
+				1F7C6DCF1E46031B00B9B1D8 /* PostHeaderCell.m */,
 			);
 			name = Cells;
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		1F4053A01E0BE7E80082A2D3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				B86CF1801E7D9DF300591276 /* PMUser.h */,
-				B86CF1811E7D9DF300591276 /* PMUser.m */,
-				B86CF17E1E7D9DF300591276 /* PMPost.h */,
-				B86CF17F1E7D9DF300591276 /* PMPost.m */,
-				B86CF19A1E7E335F00591276 /* PMPost+MapAnnotation.h */,
-				B86CF19B1E7E335F00591276 /* PMPost+MapAnnotation.m */,
 				B86CF17C1E7D9DF300591276 /* PMComment.h */,
 				B86CF17D1E7D9DF300591276 /* PMComment.m */,
+				B86CF19A1E7E335F00591276 /* PMPost+MapAnnotation.h */,
+				B86CF19B1E7E335F00591276 /* PMPost+MapAnnotation.m */,
+				B86CF17E1E7D9DF300591276 /* PMPost.h */,
+				B86CF17F1E7D9DF300591276 /* PMPost.m */,
+				B86CF1801E7D9DF300591276 /* PMUser.h */,
+				B86CF1811E7D9DF300591276 /* PMUser.m */,
 			);
 			name = Model;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		1FCC49091E0B15520035A4F9 = {
 			isa = PBXGroup;
 			children = (
+				BA68ED58D5AC9A501A4B1BD4 /* Frameworks */,
 				1FCC49141E0B15520035A4F9 /* PhotoMap */,
 				1FCC492E1E0B15520035A4F9 /* PhotoMapTests */,
 				1FCC49391E0B15520035A4F9 /* PhotoMapUITests */,
-				1FCC49131E0B15520035A4F9 /* Products */,
 				CE8ADCD02B396D07F767584F /* Pods */,
-				BA68ED58D5AC9A501A4B1BD4 /* Frameworks */,
+				1FCC49131E0B15520035A4F9 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -279,18 +284,18 @@
 		1FCC49141E0B15520035A4F9 /* PhotoMap */ = {
 			isa = PBXGroup;
 			children = (
-				1FCC49181E0B15520035A4F9 /* AppDelegate.h */,
-				1FCC49191E0B15520035A4F9 /* AppDelegate.m */,
-				1FCC49161E0B15520035A4F9 /* main.m */,
-				1FCC49211E0B15520035A4F9 /* Assets.xcassets */,
-				1FCC491E1E0B15520035A4F9 /* Main.storyboard */,
-				1F4053A01E0BE7E80082A2D3 /* Model */,
-				1F12A3781E0B2038009AFF35 /* Controllers */,
 				1F12A3741E0B1FE8009AFF35 /* API */,
 				1F1F78441E44ABE500A138CC /* Cells */,
+				1F12A3781E0B2038009AFF35 /* Controllers */,
 				B8E1E5F71E7237C700D730EF /* Helpers */,
+				1F4053A01E0BE7E80082A2D3 /* Model */,
 				1F0563361E4110D1009CB813 /* Operations */,
 				1FCC49151E0B15520035A4F9 /* Supporting Files */,
+				1FCC49181E0B15520035A4F9 /* AppDelegate.h */,
+				1FCC49191E0B15520035A4F9 /* AppDelegate.m */,
+				1FCC49211E0B15520035A4F9 /* Assets.xcassets */,
+				1FCC491E1E0B15520035A4F9 /* Main.storyboard */,
+				1FCC49161E0B15520035A4F9 /* main.m */,
 			);
 			path = PhotoMap;
 			sourceTree = "<group>";
@@ -298,21 +303,22 @@
 		1FCC49151E0B15520035A4F9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				1FCC49231E0B15520035A4F9 /* LaunchScreen.storyboard */,
 				1FCC49261E0B15520035A4F9 /* Info.plist */,
+				1FCC49231E0B15520035A4F9 /* LaunchScreen.storyboard */,
 				1F7C6DD91E462C3000B9B1D8 /* NSNull+JSON.h */,
 				1F7C6DDA1E462C3000B9B1D8 /* NSNull+JSON.m */,
 				B86CF1861E7DC16200591276 /* UIView+SuperCell.h */,
 				B86CF1871E7DC16200591276 /* UIView+SuperCell.m */,
 			);
 			name = "Supporting Files";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		1FCC492E1E0B15520035A4F9 /* PhotoMapTests */ = {
 			isa = PBXGroup;
 			children = (
-				1FCC492F1E0B15520035A4F9 /* PhotoMapTests.m */,
 				1FCC49311E0B15520035A4F9 /* Info.plist */,
+				1FCC492F1E0B15520035A4F9 /* PhotoMapTests.m */,
 			);
 			path = PhotoMapTests;
 			sourceTree = "<group>";
@@ -320,8 +326,8 @@
 		1FCC49391E0B15520035A4F9 /* PhotoMapUITests */ = {
 			isa = PBXGroup;
 			children = (
-				1FCC493A1E0B15520035A4F9 /* PhotoMapUITests.m */,
 				1FCC493C1E0B15520035A4F9 /* Info.plist */,
+				1FCC493A1E0B15520035A4F9 /* PhotoMapUITests.m */,
 			);
 			path = PhotoMapUITests;
 			sourceTree = "<group>";
@@ -329,14 +335,15 @@
 		B86CF1851E7DB14900591276 /* DDMs */ = {
 			isa = PBXGroup;
 			children = (
+				1F32FEC01E58907D00D9A507 /* CollectionViewDDM.h */,
+				1F32FEC11E58907D00D9A507 /* CollectionViewDDM.m */,
 				1F7C6DC51E4568E800B9B1D8 /* DataDisplayManager.h */,
 				1F7C6DC61E4568E800B9B1D8 /* DataDisplayManager.m */,
 				1F1F784D1E44B0A700A138CC /* TableViewDDM.h */,
 				1F1F784E1E44B0A700A138CC /* TableViewDDM.m */,
-				1F32FEC01E58907D00D9A507 /* CollectionViewDDM.h */,
-				1F32FEC11E58907D00D9A507 /* CollectionViewDDM.m */,
 			);
 			name = DDMs;
+			path = DDMs;
 			sourceTree = "<group>";
 		};
 		B86CF19D1E7E343E00591276 /* MediaControllers */ = {
@@ -344,16 +351,17 @@
 			children = (
 				B86CF1971E7DE67100591276 /* AbstractPostsViewController.h */,
 				B86CF1981E7DE67100591276 /* AbstractPostsViewController.m */,
-				B86CF1941E7DE44300591276 /* PostsTableVC.h */,
-				B86CF1951E7DE44300591276 /* PostsTableVC.m */,
 				1FCED1001E46D5BF00976AE1 /* CurrentUserMediaVC.h */,
 				1FCED1011E46D5BF00976AE1 /* CurrentUserMediaVC.m */,
 				1FCED1031E47502D00976AE1 /* LikedMediaVC.h */,
 				1FCED1041E47502D00976AE1 /* LikedMediaVC.m */,
 				1F32FEC31E58953200D9A507 /* PostsCollectionVC.h */,
 				1F32FEC41E58953200D9A507 /* PostsCollectionVC.m */,
+				B86CF1941E7DE44300591276 /* PostsTableVC.h */,
+				B86CF1951E7DE44300591276 /* PostsTableVC.m */,
 			);
 			name = MediaControllers;
+			path = MediaControllers;
 			sourceTree = "<group>";
 		};
 		B8E1E5F71E7237C700D730EF /* Helpers */ = {
@@ -367,6 +375,7 @@
 				B8E1E5F91E7237E300D730EF /* TextTagDecorator.m */,
 			);
 			name = Helpers;
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		BA68ED58D5AC9A501A4B1BD4 /* Frameworks */ = {
@@ -650,6 +659,7 @@
 				1FCC491F1E0B15520035A4F9 /* Base */,
 			);
 			name = Main.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 		1FCC49231E0B15520035A4F9 /* LaunchScreen.storyboard */ = {
@@ -658,6 +668,7 @@
 				1FCC49241E0B15520035A4F9 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -763,7 +774,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 583T3423ZK;
-				INFOPLIST_FILE = PhotoMap/Info.plist;
+				INFOPLIST_FILE = "PhotoMap/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nitrey.PhotoMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -780,7 +791,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 583T3423ZK;
-				INFOPLIST_FILE = PhotoMap/Info.plist;
+				INFOPLIST_FILE = "PhotoMap/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nitrey.PhotoMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
