@@ -24,6 +24,7 @@
 @property (readonly, strong, nonatomic) NSArray *postsByUser; //of PMPosts
 
 - (instancetype)initWithInfo:(NSDictionary *)info;
+- (instancetype)updateUserInfo:(NSDictionary *)info;
 - (void)addPosts:(NSArray *)array;
 - (void)addPost:(PMPost *)post;
 

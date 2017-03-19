@@ -17,7 +17,7 @@
 
 @implementation CurrentUserMediaVC
 
-static NSInteger POSTS_IN_REQUEST = 5;
+static NSInteger POSTS_IN_REQUEST = 20;
 static NSString * kNextMaxIDKeyPath = @"pagination.next_max_id";
 
 - (void)viewDidLoad {

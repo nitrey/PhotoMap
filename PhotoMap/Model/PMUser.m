@@ -30,7 +30,6 @@ static NSString * kPostsCountKeyPath = @"counts.media";
 @implementation PMUser
 
 - (instancetype)initWithInfo:(NSDictionary *)info {
-    
     self = [super init];
     if (self) {
         _userID = [info valueForKeyPath:kUserIDKeyPath];
@@ -47,6 +46,23 @@ static NSString * kPostsCountKeyPath = @"counts.media";
         _websiteURLString = [websiteURLString isKindOfClass:[NSNull class]] ? nil : websiteURLString;
         _postsByUser = @[];
         _postsByUserIDs = [NSMutableArray array];
+    }
+    return self;
+}
+
+- (instancetype)updateUserInfo:(NSDictionary *)info {
+    if ([_username isEqualToString:[info valueForKeyPath:kUsernameKeyPath]]) {
+        _userID = [info valueForKeyPath:kUserIDKeyPath];
+        _fullName = [info valueForKeyPath:kFullnameKeyPath];
+        _bio = [info valueForKeyPath:kBioKeyPath];
+        _postsCount = [info valueForKeyPath:kPostsCountKeyPath];
+        _followersCount = [info valueForKeyPath:kFollowersCountKeyPath];
+        _followingCount = [info valueForKeyPath:kFollowingCountKeyPath];
+        //checking if URLs are entities of NSNull class
+        NSString *pictureURLString = [info valueForKeyPath:kPictureURLKeyPath];
+        _pictureURLString = [pictureURLString isKindOfClass:[NSNull class]] ? nil : pictureURLString;
+        NSString *websiteURLString = [info valueForKeyPath:kWebsiteURLKeyPath];
+        _websiteURLString = [websiteURLString isKindOfClass:[NSNull class]] ? nil : websiteURLString;
     }
     return self;
 }

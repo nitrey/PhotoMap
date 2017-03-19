@@ -55,15 +55,12 @@ static NSString * const kCustomUserInfoGetRequestFormat = @"https://api.instagra
 }
 
 - (void)setToken:(PMAccessToken *)token {
-    
     _token = token;
-    
     if (token.number) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         [userDefaults setValue:token.number forKey:kAcessTokenNumber];
         [userDefaults synchronize];
     }
-    
     AALog([NSString stringWithFormat:@"ACCESS TOKEN RECEIVED: %@", token.number]);
 }
 
