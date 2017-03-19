@@ -7,6 +7,8 @@
 //
 
 #import "MapViewController.h"
+#import "MapViewDDM.h"
+#import "PMServerManager.h"
 #import <MapKit/MapKit.h>
 
 @interface MapViewController ()
@@ -19,11 +21,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setup];
+    [self setupMapViewController];
 }
 
-- (void)setup {
+- (void)setupMapViewController {
     self.title = @"PhotoMap";
+    self.dataSource = [[MapViewDDM alloc] initWithUser:[PMServerManager sharedManager].currentUser];
     [self.mapView addAnnotations:[self.dataSource objectsForAnnotations]];
     [self.mapView showAnnotations:[self.dataSource objectsForAnnotations] animated:YES];
 }

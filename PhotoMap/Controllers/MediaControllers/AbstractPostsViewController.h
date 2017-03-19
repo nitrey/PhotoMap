@@ -12,9 +12,9 @@
 
 @interface AbstractPostsViewController : UIViewController
 
-@property (nonatomic, strong) PMServerManager *serverManager;
-@property (nonatomic, strong) NSOperationQueue *queue;
-@property (nonatomic, strong) PMUser *user;
+@property (strong, nonatomic) PMServerManager *serverManager;
+@property (strong, nonatomic) NSOperationQueue *queue;
+@property (strong, nonatomic) PMUser *user;
 
 - (void)mapResponseObject:(NSDictionary *)responseObject;
 - (void)performBlockOnMainQueue:(void(^)(void))block;

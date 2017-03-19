@@ -41,21 +41,18 @@ static NSString * const kCommentsButtonFormat = @"%lu comments";
 @implementation SinglePostVC
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
     [self setup];
 }
 
 - (void)setup {
     self.title = @"Photo";
-    
     [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
     self.userImageView.layer.cornerRadius = self.userImageView.bounds.size.width / 2.0;
     self.userImageView.clipsToBounds = YES;
     
     __weak typeof(self) weakSelf = self;
     PMPost *post = self.post;
-    
     if (post) {
         self.userNameLabel.text = self.post.nickname;
         self.placeLabel.text = self.post.location ? self.post.location : @"";

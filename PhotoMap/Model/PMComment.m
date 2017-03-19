@@ -14,7 +14,7 @@ static NSString *const kUserPhotoKeyPath = @"from.profile_picture";
 
 @interface PMComment ()
 
-@property (nonatomic, strong) NSString *userPhotoURLString;
+@property (strong, nonatomic) NSString *userPhotoURLString;
 
 @end
 

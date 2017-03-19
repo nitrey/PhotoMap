@@ -36,6 +36,7 @@
 		1FCED1021E46D5BF00976AE1 /* CurrentUserMediaVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FCED1011E46D5BF00976AE1 /* CurrentUserMediaVC.m */; };
 		1FCED1051E47502D00976AE1 /* LikedMediaVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FCED1041E47502D00976AE1 /* LikedMediaVC.m */; };
 		B84857781E70E64000187DF9 /* SinglePostVC.m in Sources */ = {isa = PBXBuildFile; fileRef = B84857771E70E64000187DF9 /* SinglePostVC.m */; };
+		B857F1F41E7EEE0400C047DA /* MapViewDDM.m in Sources */ = {isa = PBXBuildFile; fileRef = B857F1F31E7EEE0400C047DA /* MapViewDDM.m */; };
 		B86CF1821E7D9DF300591276 /* PMComment.m in Sources */ = {isa = PBXBuildFile; fileRef = B86CF17D1E7D9DF300591276 /* PMComment.m */; };
 		B86CF1831E7D9DF300591276 /* PMPost.m in Sources */ = {isa = PBXBuildFile; fileRef = B86CF17F1E7D9DF300591276 /* PMPost.m */; };
 		B86CF1841E7D9DF300591276 /* PMUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B86CF1811E7D9DF300591276 /* PMUser.m */; };
@@ -127,6 +128,8 @@
 		AC868EF736714DE198E4AF81 /* Pods-PhotoMap.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoMap.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoMap/Pods-PhotoMap.debug.xcconfig"; sourceTree = "<group>"; };
 		B84857761E70E64000187DF9 /* SinglePostVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinglePostVC.h; sourceTree = "<group>"; };
 		B84857771E70E64000187DF9 /* SinglePostVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinglePostVC.m; sourceTree = "<group>"; };
+		B857F1F21E7EEE0400C047DA /* MapViewDDM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewDDM.h; sourceTree = "<group>"; };
+		B857F1F31E7EEE0400C047DA /* MapViewDDM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewDDM.m; sourceTree = "<group>"; };
 		B86CF17C1E7D9DF300591276 /* PMComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMComment.h; sourceTree = "<group>"; };
 		B86CF17D1E7D9DF300591276 /* PMComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMComment.m; sourceTree = "<group>"; };
 		B86CF17E1E7D9DF300591276 /* PMPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMPost.h; sourceTree = "<group>"; };
@@ -187,7 +190,6 @@
 				1F1F78551E44BB0E00A138CC /* PostMappingOperation.h */,
 				1F1F78561E44BB0E00A138CC /* PostMappingOperation.m */,
 			);
-			name = Operations;
 			path = Operations;
 			sourceTree = "<group>";
 		};
@@ -199,14 +201,12 @@
 				1F12A3711E0B1A53009AFF35 /* PMServerManager.h */,
 				1F12A3721E0B1A53009AFF35 /* PMServerManager.m */,
 			);
-			name = API;
 			path = API;
 			sourceTree = "<group>";
 		};
 		1F12A3781E0B2038009AFF35 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				B86CF1851E7DB14900591276 /* DDMs */,
 				B86CF19D1E7E343E00591276 /* MediaControllers */,
 				B8E1E5EE1E722E1400D730EF /* CommentsVC.h */,
 				B8E1E5EF1E722E1400D730EF /* CommentsVC.m */,
@@ -219,7 +219,6 @@
 				1FCC491B1E0B15520035A4F9 /* ViewController.h */,
 				1FCC491C1E0B15520035A4F9 /* ViewController.m */,
 			);
-			name = Controllers;
 			path = Controllers;
 			sourceTree = "<group>";
 		};
@@ -230,16 +229,15 @@
 				1F32FEBE1E58857400D9A507 /* CollectionPhotoCell.m */,
 				B8E1E5F11E722E7200D730EF /* CommentCell.h */,
 				B8E1E5F21E722E7200D730EF /* CommentCell.m */,
-				1F1F78451E44AC3300A138CC /* PostBodyCell.h */,
-				1F1F78461E44AC3300A138CC /* PostBodyCell.m */,
 				1F7C6DCB1E46023000B9B1D8 /* PostCell.h */,
 				1F7C6DCC1E46023000B9B1D8 /* PostCell.m */,
-				1F7C6DD11E46032A00B9B1D8 /* PostFooterCell.h */,
-				1F7C6DD21E46032A00B9B1D8 /* PostFooterCell.m */,
 				1F7C6DCE1E46031B00B9B1D8 /* PostHeaderCell.h */,
 				1F7C6DCF1E46031B00B9B1D8 /* PostHeaderCell.m */,
+				1F1F78451E44AC3300A138CC /* PostBodyCell.h */,
+				1F1F78461E44AC3300A138CC /* PostBodyCell.m */,
+				1F7C6DD11E46032A00B9B1D8 /* PostFooterCell.h */,
+				1F7C6DD21E46032A00B9B1D8 /* PostFooterCell.m */,
 			);
-			name = Cells;
 			path = Cells;
 			sourceTree = "<group>";
 		};
@@ -255,19 +253,18 @@
 				B86CF1801E7D9DF300591276 /* PMUser.h */,
 				B86CF1811E7D9DF300591276 /* PMUser.m */,
 			);
-			name = Model;
 			path = Model;
 			sourceTree = "<group>";
 		};
 		1FCC49091E0B15520035A4F9 = {
 			isa = PBXGroup;
 			children = (
-				BA68ED58D5AC9A501A4B1BD4 /* Frameworks */,
 				1FCC49141E0B15520035A4F9 /* PhotoMap */,
 				1FCC492E1E0B15520035A4F9 /* PhotoMapTests */,
 				1FCC49391E0B15520035A4F9 /* PhotoMapUITests */,
 				CE8ADCD02B396D07F767584F /* Pods */,
 				1FCC49131E0B15520035A4F9 /* Products */,
+				BA68ED58D5AC9A501A4B1BD4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -287,6 +284,7 @@
 				1F12A3741E0B1FE8009AFF35 /* API */,
 				1F1F78441E44ABE500A138CC /* Cells */,
 				1F12A3781E0B2038009AFF35 /* Controllers */,
+				B86CF1851E7DB14900591276 /* DDMs */,
 				B8E1E5F71E7237C700D730EF /* Helpers */,
 				1F4053A01E0BE7E80082A2D3 /* Model */,
 				1F0563361E4110D1009CB813 /* Operations */,
@@ -310,7 +308,6 @@
 				B86CF1861E7DC16200591276 /* UIView+SuperCell.h */,
 				B86CF1871E7DC16200591276 /* UIView+SuperCell.m */,
 			);
-			name = "Supporting Files";
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
@@ -335,6 +332,8 @@
 		B86CF1851E7DB14900591276 /* DDMs */ = {
 			isa = PBXGroup;
 			children = (
+				B857F1F21E7EEE0400C047DA /* MapViewDDM.h */,
+				B857F1F31E7EEE0400C047DA /* MapViewDDM.m */,
 				1F32FEC01E58907D00D9A507 /* CollectionViewDDM.h */,
 				1F32FEC11E58907D00D9A507 /* CollectionViewDDM.m */,
 				1F7C6DC51E4568E800B9B1D8 /* DataDisplayManager.h */,
@@ -343,7 +342,7 @@
 				1F1F784E1E44B0A700A138CC /* TableViewDDM.m */,
 			);
 			name = DDMs;
-			path = DDMs;
+			path = Controllers/DDMs;
 			sourceTree = "<group>";
 		};
 		B86CF19D1E7E343E00591276 /* MediaControllers */ = {
@@ -360,7 +359,6 @@
 				B86CF1941E7DE44300591276 /* PostsTableVC.h */,
 				B86CF1951E7DE44300591276 /* PostsTableVC.m */,
 			);
-			name = MediaControllers;
 			path = MediaControllers;
 			sourceTree = "<group>";
 		};
@@ -374,7 +372,6 @@
 				B8E1E5F81E7237E300D730EF /* TextTagDecorator.h */,
 				B8E1E5F91E7237E300D730EF /* TextTagDecorator.m */,
 			);
-			name = Helpers;
 			path = Helpers;
 			sourceTree = "<group>";
 		};
@@ -611,6 +608,7 @@
 				1FCED1021E46D5BF00976AE1 /* CurrentUserMediaVC.m in Sources */,
 				1FCC49171E0B15520035A4F9 /* main.m in Sources */,
 				1F0563351E4100F4009CB813 /* MappingOperation.m in Sources */,
+				B857F1F41E7EEE0400C047DA /* MapViewDDM.m in Sources */,
 				1F12A3701E0B1664009AFF35 /* AAUtils.m in Sources */,
 				B86CF18D1E7DCDA600591276 /* MapViewController.m in Sources */,
 				B86CF19C1E7E335F00591276 /* PMPost+MapAnnotation.m in Sources */,

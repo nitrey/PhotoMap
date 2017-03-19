@@ -11,10 +11,9 @@
 @implementation PMAccessToken
 
 - (instancetype)initWithNumber:(NSString *)number {
-    
     self = [super init];
     if (self) {
-        self.number = number;
+        _number = number;
     }
     return self;
 }

@@ -13,21 +13,21 @@
 
 @interface PMPost : NSObject
 
-@property (readonly, nonatomic, strong) NSNumber *postID;
-@property (readonly, nonatomic, strong) NSString *mediaID;
-@property (readonly, nonatomic, strong) NSURL *userPhotoURL;
-@property (readonly, nonatomic, strong) NSString *nickname;
-@property (readonly, nonatomic, strong) NSString *location;
-@property (readonly, nonatomic, strong) NSURL *postPhotoURL;
-@property (readonly, nonatomic, assign) NSUInteger likesCount;
-@property (readonly, nonatomic, assign) NSUInteger commentsCount;
-@property (readonly, nonatomic, strong) NSString *postDescription;
-@property (readonly, nonatomic, strong) NSArray *postHashtags; //of NSStrings
-@property (readonly, nonatomic, strong) NSDictionary *postInfo;
-@property (readonly, nonatomic, assign) CLLocationDegrees latitude;
-@property (readonly, nonatomic, assign) CLLocationDegrees longitude;
-@property (nonatomic, strong) UIImage *userPhotoImage;
-@property (nonatomic, strong) UIImage *postPhotoImage;
+@property (readonly, strong, nonatomic) NSNumber *postID;
+@property (readonly, strong, nonatomic) NSString *mediaID;
+@property (readonly, strong, nonatomic) NSURL *userPhotoURL;
+@property (readonly, strong, nonatomic) NSString *nickname;
+@property (readonly, strong, nonatomic) NSString *location;
+@property (readonly, strong, nonatomic) NSURL *postPhotoURL;
+@property (readonly, assign, nonatomic) NSUInteger likesCount;
+@property (readonly, assign, nonatomic) NSUInteger commentsCount;
+@property (readonly, strong, nonatomic) NSString *postDescription;
+@property (readonly, strong, nonatomic) NSArray *postHashtags; //of NSStrings
+@property (readonly, strong, nonatomic) NSDictionary *postInfo;
+@property (readonly, assign, nonatomic) CLLocationDegrees latitude;
+@property (readonly, assign, nonatomic) CLLocationDegrees longitude;
+@property (strong, nonatomic) UIImage *userPhotoImage;
+@property (strong, nonatomic) UIImage *postPhotoImage;
 
 - (instancetype)initWithPostInfo:(NSDictionary *)postInfo;
 

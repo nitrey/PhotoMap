@@ -24,7 +24,6 @@
 }
 
 - (void)setLikesCount:(NSUInteger)likes andCommentsCount:(NSUInteger)comments {
-    
     self.likesCountLabel.text = [NSString stringWithFormat:@"%ld likes", likes];
     [self.showCommentsButton setTitle:comments ?
      [NSString stringWithFormat:@"Show all %ld comments", comments] : @"No comments"

@@ -10,9 +10,6 @@
 #import "PMUser.h"
 #import "PMAccessToken.h"
 
-//operations
-#import "MappingOperation.h"
-
 //controllers
 #import "ViewController.h"
 #import "PMLoginViewController.h"
@@ -20,6 +17,7 @@
 #import "LikedMediaVC.h"
 #import "PostsCollectionVC.h"
 #import "MapViewController.h"
+#import "MapViewDDM.h"
 
 //helpers
 #import "PMServerManager.h"
@@ -28,7 +26,7 @@
 //libraries
 #import <AFNetworking/AFNetworking.h>
 
-@interface ViewController () <MapAnnotationsDataSource>
+@interface ViewController () 
 
 @property (weak, nonatomic) IBOutlet UITextField *userIDField;
 @property (strong, nonatomic) NSOperationQueue *queue;
@@ -110,14 +108,13 @@ CGFloat headerStackViewHeightConstant = 80.0;
 
 - (void)setUser:(PMUser *)user {
     if (![_user.username isEqualToString:user.username]) {
+        _user = user;
         AALog(@"New user! Username = %@", user.username);
         [self actionGetCurrentUserInfo:nil];
-        
-        [[PMImageDownloader sharedDownloader] downloadImage:[user pictureURL] completion:^(UIImage *image) {
+        [[PMImageDownloader sharedDownloader] downloadImage:user.pictureURL completion:^(UIImage *image) {
             self.userImageView.image = image;
         }];
     }
-    _user = user;
 }
 
 - (void)updateCounts {
@@ -134,21 +131,17 @@ CGFloat headerStackViewHeightConstant = 80.0;
 
 - (IBAction)actionUserLogin:(UIButton *)sender {
     PMLoginViewController *loginVC = [[PMLoginViewController alloc] initWithCompletionBlock:^(PMAccessToken *token, PMUser *user) {
-        self.serverManager.token = token;
         if (user != nil) {
             self.user = user;
         }
     }];
-    
     UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:loginVC];
     [self presentViewController:navVC animated:YES completion:nil];
 }
 
 - (void)actionShowMapWithPosts {
-    
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     MapViewController *vc = [storyBoard instantiateViewControllerWithIdentifier:@"MapViewController"];
-    vc.dataSource = self;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -156,7 +149,6 @@ CGFloat headerStackViewHeightConstant = 80.0;
     NSString *requestString = [NSString stringWithFormat:@"https://api.instagram.com/v1/users/self?access_token=%@", self.serverManager.token.number];
     
     __weak ViewController *weakSelf = self;
-    
     [self.serverManager.sessionManager GET:requestString
                      parameters:nil
                        progress:nil
@@ -166,9 +158,11 @@ CGFloat headerStackViewHeightConstant = 80.0;
                             AALog(@"RESPONSE OBJECT: %@", responseObject);
                             
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                weakSelf.user = [[PMUser alloc] initWithInfo:responseObject[@"data"]];
+                                PMUser *user = [[PMUser alloc] initWithInfo:responseObject[@"data"]];
+                                weakSelf.user = user;
+                                [PMServerManager sharedManager].currentUser = user;
                                 if (weakSelf.childVC) {
-                                    [(AbstractPostsViewController *)weakSelf.childVC setUser:weakSelf.user];
+                                    [(AbstractPostsViewController *)weakSelf.childVC setUser:[PMServerManager sharedManager].currentUser];
                                 }
                                 [weakSelf updateCounts];
                             });
@@ -180,28 +174,27 @@ CGFloat headerStackViewHeightConstant = 80.0;
 }
 
 - (IBAction)actionShowCurrentUserMediaInCollection:(id)sender {
-    
+    if ([self.childVC isKindOfClass:[PostsCollectionVC class]]) {
+        return;
+    }
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     PostsCollectionVC *detailVC = [storyboard instantiateViewControllerWithIdentifier:@"PostsCollectionVC"];
-    detailVC.user = self.user;
+    detailVC.user = [PMServerManager sharedManager].currentUser;
     
     [self addChildViewController:detailVC];
     CGRect rect = self.view.bounds;
-    
     CGFloat topOffset = headerStackViewHeightConstant;
     rect.origin.y = topOffset;
     rect.size.height -= topOffset;
     detailVC.view.frame = rect;
     
     __weak ViewController *weakSelf = self;
-    
     if (self.childVC != nil) {
         [self transitionFromViewController:self.childVC
                           toViewController:detailVC
                                   duration:1.0
                                    options:UIViewAnimationOptionTransitionFlipFromLeft
                                 animations:^{
-                                    
                                 }
                                 completion:^(BOOL finished) {
                                     [weakSelf.childVC removeFromParentViewController];
@@ -211,25 +204,24 @@ CGFloat headerStackViewHeightConstant = 80.0;
         self.childVC = detailVC;
         [self.view addSubview:detailVC.view];
     }
-    
 }
 
 - (IBAction)actionGetCurrentUserMedia:(UIButton *)sender {
-    
+    if ([self.childVC isKindOfClass:[CurrentUserMediaVC class]]) {
+        return;
+    }
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     CurrentUserMediaVC *detailVC = [storyboard instantiateViewControllerWithIdentifier:@"CurrentUserMediaVC"];
-    detailVC.user = self.user;
+    detailVC.user = [PMServerManager sharedManager].currentUser;
     
     [self addChildViewController:detailVC];
     CGRect rect = self.view.bounds;
-    
     CGFloat topOffset = headerStackViewHeightConstant;
     rect.origin.y = topOffset;
     rect.size.height -= topOffset;
     detailVC.view.frame = rect;
     
     __weak ViewController *weakSelf = self;
-    
     if (self.childVC != nil) {
         [self transitionFromViewController:self.childVC
                           toViewController:detailVC
@@ -253,13 +245,11 @@ CGFloat headerStackViewHeightConstant = 80.0;
     if ([self.childVC isKindOfClass:[LikedMediaVC class]]) {
         return;
     }
-    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     LikedMediaVC *detailVC = [storyboard instantiateViewControllerWithIdentifier:@"LikedMediaVC"];
     
     [self addChildViewController:detailVC];
     CGRect rect = self.view.bounds;
-    
     CGFloat topOffset = CGRectGetMaxY(self.headerStackView.frame);
     rect.origin.y = topOffset;
     rect.size.height -= topOffset;
@@ -270,7 +260,6 @@ CGFloat headerStackViewHeightConstant = 80.0;
 - (IBAction)actionGetUserInfo:(id)sender {
     
     NSString *userID = self.userIDField.text;
-    
     if (userID) {
         [self.serverManager
          getUserInfo:userID
@@ -280,29 +269,6 @@ CGFloat headerStackViewHeightConstant = 80.0;
              AALog(@"actionGetUserInfo FAILURE");
          }];
     }
-}
-
-- (IBAction)actionGetUserMedia:(id)sender {
-    
-    NSString *userID = self.userIDField.text;
-    
-    if (userID) {
-        [self.serverManager
-         getUsersRecentMedia:userID
-         OnSuccess:^(NSDictionary *responseObject) {
-             AALog(@"actionGetUsersMedia SUCCESS");
-         } onFailure:^(NSError *error) {
-             AALog(@"actionGetUsersMedia FAILURE");
-         }];
-    }
-}
-
-
-#pragma mark - <MapAnnotationsDataSource>
-
-- (NSArray *)objectsForAnnotations {
-    
-    return self.user.postsByUser;
 }
 
 @end

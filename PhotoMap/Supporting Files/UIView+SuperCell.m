@@ -11,7 +11,6 @@
 @implementation UIView (SuperCell)
 
 - (nullable UITableViewCell *)superViewCell {
-    
     UIView *superview = self.superview;
     if (superview == nil) {
         return nil;

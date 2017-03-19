@@ -13,6 +13,11 @@
 #import "PMUser.h"
 #import "PMAccessToken.h"
 
+typedef NS_ENUM(NSUInteger, AuthenticationType) {
+    AuthenticationTypeCode,
+    AuthenticationTypeToken
+};
+
 @interface PMLoginViewController () <UIWebViewDelegate>
 
 @property (strong, nonatomic) UIWebView *webView;
@@ -39,28 +44,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.navigationItem.title = @"Login";
-    
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
                                      initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                           target:self
                                                           action:@selector(actionCancel:)];
-    
     self.navigationItem.rightBarButtonItem = cancelButton;
     
     CGRect rect = self.view.bounds;
     rect.origin = CGPointZero;
-    
     UIWebView *webView = [[UIWebView alloc] initWithFrame:rect];
-    
     self.webView = webView;
     self.webView.delegate = self;
-    
     [self.view addSubview:self.webView];
-    
-    //[self runTokenAuthentication];
-    [self runCodeAuthentication];
+    //[self runAuthenticationWithType:AuthenticationTypeToken];
+    [self runAuthenticationWithType:AuthenticationTypeCode];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -68,35 +66,28 @@
 }
 
 - (void)dealloc {
-    
     self.webView.delegate = nil;
 }
 
 #pragma mark - Authentication
 
-- (void)runTokenAuthentication {
-    
+- (void)runAuthenticationWithType:(AuthenticationType)type {
+    NSString *authenticationType;
+    if (type == AuthenticationTypeCode) {
+        authenticationType = @"code";
+    } else if (type == AuthenticationTypeToken) {
+        authenticationType = @"token";
+    }
     NSString *urlString = [NSString stringWithFormat:@"https://api.instagram.com/oauth/authorize/"
                            "?client_id=%@&"
                            "redirect_uri=%@&"
-                           "response_type=token", INSTAGRAM_CLIENT_ID, INSTAGRAM_REDIRECT_URI];
+                           "response_type=%@",
+                           INSTAGRAM_CLIENT_ID,
+                           INSTAGRAM_REDIRECT_URI,
+                           authenticationType];
     
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    [self.webView loadRequest:request];
-}
-
-- (void)runCodeAuthentication {
-    
-    NSString *urlString = [NSString stringWithFormat:@"https://api.instagram.com/oauth/authorize/"
-                           "?client_id=%@&"
-                           "redirect_uri=%@&"
-                           "response_type=code", INSTAGRAM_CLIENT_ID, INSTAGRAM_REDIRECT_URI];
-    
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
     [self.webView loadRequest:request];
 }
 
@@ -117,7 +108,6 @@
         
         NSString *accessTokenNumber = [requestURLString substringFromIndex:tokenSearchRange.location + tokenSearchRange.length];
         PMAccessToken *accessToken = [[PMAccessToken alloc] initWithNumber:accessTokenNumber];
-        
         self.completionBlock(accessToken, nil);
         [self actionCancel:nil];
         return NO;
@@ -127,14 +117,9 @@
         
         NSString *code = [requestURLString substringFromIndex:codeSearchRange.location + codeSearchRange.length];
         [[PMServerManager sharedManager] getAccessTokenWithCode:code
-                                                      onSuccess:^(NSDictionary *authenticationInfo) {
-                                                          
-                                                          NSString *accessTokenNumber = [authenticationInfo objectForKey:@"access_token"];
-                                                          PMAccessToken *accessToken = [[PMAccessToken alloc] initWithNumber:accessTokenNumber];
-                                                          PMUser *user = [[PMUser alloc] initWithInfo:authenticationInfo[@"user"]];
-                                                          self.completionBlock(accessToken, user);
+                                                      onSuccess:^(PMUser *user, PMAccessToken *token) {
+                                                          self.completionBlock(token, user);
                                                           [self actionCancel:nil];
-                                                          
                                                       } onFailure:^(NSError *error) {
                                                           NSLog(@"ERROR: %@", [error userInfo]);
                                                       }];

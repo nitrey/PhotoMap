@@ -14,19 +14,16 @@ void AALog(NSString *text, ...) {
     
     va_list argumentList;
     va_start(argumentList, text);
-    
     NSLogv(text, argumentList);
-    
     va_end(argumentList);
+    
 #endif
 }
 
 BOOL isIPad() {
-    
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
 }
 
 BOOL isIPhone() {
-    
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }

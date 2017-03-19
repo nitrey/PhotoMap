@@ -13,7 +13,7 @@
 
 @interface DataDisplayManager : NSObject
 
-@property (nonatomic, strong) NSArray *dataArray;
+@property (strong, nonatomic) NSArray *dataArray;
 
 - (instancetype)initWithDataArray:(NSArray *)array;
 

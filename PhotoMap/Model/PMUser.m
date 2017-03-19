@@ -21,9 +21,9 @@ static NSString * kPostsCountKeyPath = @"counts.media";
 
 @interface PMUser ()
 
-@property (nonatomic, strong) NSString *pictureURLString;
-@property (nonatomic, strong) NSString *websiteURLString;
-@property (nonatomic, strong) NSMutableArray *postsByUserIDs; //of NSString
+@property (strong, nonatomic) NSString *pictureURLString;
+@property (strong, nonatomic) NSString *websiteURLString;
+@property (strong, nonatomic) NSMutableArray *postsByUserIDs; //of NSString
 
 @end
 

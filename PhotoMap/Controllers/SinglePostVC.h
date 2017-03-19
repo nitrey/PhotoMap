@@ -12,6 +12,6 @@
 
 @interface SinglePostVC : UIViewController
 
-@property (nonatomic, strong) PMPost *post;
+@property (strong, nonatomic) PMPost *post;
 
 @end

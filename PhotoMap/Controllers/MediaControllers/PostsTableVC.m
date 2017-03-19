@@ -22,9 +22,9 @@
 
 @interface PostsTableVC () <TableViewDDMDelegate>
 
-@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
-@property (nonatomic, strong) NSString *nextMaxID;
-@property (nonatomic, assign) CGPoint lastContentOffset;
+@property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
+@property (strong, nonatomic) NSString *nextMaxID;
+@property (assign, nonatomic) CGPoint lastContentOffset;
 
 @end
 
@@ -72,7 +72,7 @@ static CGFloat kActivityIndicatorOffsetY = -20.0;
 - (void)setUser:(PMUser *)user {
     _user = user;
     if ([self.dataManager.dataArray count]) {
-        [user addPosts:self.dataManager.dataArray];
+        [[PMServerManager sharedManager].currentUser addPosts:self.dataManager.dataArray];
     }
 }
 
@@ -114,7 +114,7 @@ static CGFloat kActivityIndicatorOffsetY = -20.0;
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     for (PMPost *post in array) {
         [newArray addObject:post];
-        [self.user addPost:post];
+        [[PMServerManager sharedManager].currentUser addPost:post];
         [indexSet addIndex:objIndex];
         objIndex += 1;
     }

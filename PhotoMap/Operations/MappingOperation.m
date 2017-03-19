@@ -12,13 +12,11 @@
 @implementation MappingOperation
 
 - (void)main {
-    
     if (self.input == nil) {
         [self cancel];
     }
-
     NSDictionary *userInfo = self.input[@"data"];
-    self.user = [[PMUser alloc] initWithInfo:userInfo];
+    self.result = [[PMUser alloc] initWithInfo:userInfo];
 }
 
 @end

@@ -12,10 +12,10 @@
 
 @interface PMComment : NSObject
 
-@property (readonly, nonatomic, strong) NSString *text;
-@property (readonly, nonatomic, strong) NSString *username;
-@property (readonly, nonatomic, strong) NSURL *userPhotoURL;
-@property (nonatomic, strong) UIImage *userPhoto;
+@property (readonly, strong, nonatomic) NSString *text;
+@property (readonly, strong, nonatomic) NSString *username;
+@property (readonly, strong, nonatomic) NSURL *userPhotoURL;
+@property (strong, nonatomic) UIImage *userPhoto;
 
 - (instancetype)initWithInfo:(NSDictionary *)commentInfo;
 

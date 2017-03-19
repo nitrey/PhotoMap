@@ -13,7 +13,6 @@
 @implementation PostMappingOperation
 
 - (instancetype)initWithDictionary:(NSDictionary *)inputDictionary {
-    
     self = [super init];
     if (self != nil) {
         _input = inputDictionary;
@@ -23,16 +22,12 @@
 
 
 - (void)main {
-    
     NSArray *postsInfoArray = self.input[@"data"];
     NSMutableArray *postsArray = [NSMutableArray array];
-    
     for (NSDictionary *postInfo in postsInfoArray) {
-        
         PMPost *post = [[PMPost alloc] initWithPostInfo:postInfo];
         [postsArray addObject:post];
     }
-    
     self.result = [postsArray copy];
 }
 
