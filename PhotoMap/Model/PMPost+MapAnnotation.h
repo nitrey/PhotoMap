@@ -10,6 +10,6 @@
 
 @interface PMPost (MapAnnotation) <MKAnnotation>
 
-@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
+@property (assign, nonatomic) CLLocationCoordinate2D coordinate;
 
 @end

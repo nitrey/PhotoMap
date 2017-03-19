@@ -10,7 +10,7 @@
 
 @interface PMAccessToken : NSObject
 
-@property (strong, nonatomic) NSString *number;
+@property (readonly, strong, nonatomic) NSString *number;
 
 - (instancetype)initWithNumber:(NSString *)number;
 

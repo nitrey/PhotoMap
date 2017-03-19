@@ -15,12 +15,6 @@
 #import "TextTagDecorator.h"
 #import "PMImageDownloader.h"
 
-@interface CommentCell ()
-
-
-
-@end
-
 @implementation CommentCell
 
 - (void)configureWithComment:(PMComment *)comment {
@@ -50,17 +44,14 @@
 }
 
 - (CGFloat)commentLabelWidth {
-    
     return self.commentTextLabel.bounds.size.width;
 }
 
 - (NSAttributedString *)commentText {
-    
     return self.commentTextLabel.attributedText;
 }
                                     
 - (NSAttributedString *)boldStringFromString:(NSString *)string {
-    
     NSMutableAttributedString *resultString = [[NSMutableAttributedString alloc] initWithString:string];
     UIFont *font = [UIFont boldSystemFontOfSize:15.0];
     [resultString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, [resultString length])];

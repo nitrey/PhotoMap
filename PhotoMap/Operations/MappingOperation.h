@@ -13,6 +13,6 @@
 @interface MappingOperation : NSOperation
 
 @property (strong, nonatomic) NSDictionary *input;
-@property (strong, nonatomic) PMUser *user;
+@property (strong, nonatomic) PMUser *result;
 
 @end

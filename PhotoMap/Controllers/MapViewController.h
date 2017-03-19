@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class PMUser;
+
 @protocol MapAnnotationsDataSource <NSObject>
 
+@property (strong, nonatomic) PMUser *user;
 @optional
 - (NSArray *)objectsForAnnotations;
 
@@ -17,6 +20,6 @@
 
 @interface MapViewController : UIViewController
 
-@property (nonatomic, strong) id <MapAnnotationsDataSource> dataSource;
+@property (strong, nonatomic) id <MapAnnotationsDataSource> dataSource;
 
 @end

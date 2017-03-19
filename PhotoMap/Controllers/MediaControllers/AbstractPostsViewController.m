@@ -25,12 +25,10 @@
 #pragma mark - API
 
 - (void)getMedia {
-    
     //ABSTRACT METHOD, SHOULD BE OVERRIDDEN BY CONCRETE SUBCLASSES
 }
 
 - (void(^)(void))blockUpdatingUI {
-    
     //ABSTRACT METHOD, SHOULD BE OVERRIDDEN BY CONCRETE SUBCLASSES
     return nil;
 }
@@ -53,7 +51,6 @@
 #pragma mark - Supporting methods
 
 - (void)updateDataManagerWithArray:(NSArray *)array {
-    
     //ABSTRACT METHOD, SHOULD BE OVERRIDDEN BY CONCRETE SUBCLASSES
 }
 

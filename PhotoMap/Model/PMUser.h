@@ -12,16 +12,16 @@
 
 @interface PMUser : NSObject
 
-@property (readonly, nonatomic, strong) NSString *username;
-@property (readonly, nonatomic, strong) NSString *userID;
-@property (readonly, nonatomic, strong) NSString *bio;
-@property (readonly, nonatomic, strong) NSString *fullName;
-@property (readonly, nonatomic, strong) NSURL *pictureURL;
-@property (readonly, nonatomic, strong) NSURL *websiteURL;
-@property (readonly, nonatomic, strong) NSNumber *postsCount;
-@property (readonly, nonatomic, strong) NSNumber *followersCount;
-@property (readonly, nonatomic, strong) NSNumber *followingCount;
-@property (readonly, nonatomic, strong) NSArray *postsByUser; //of PMPosts
+@property (readonly, strong, nonatomic) NSString *username;
+@property (readonly, strong, nonatomic) NSString *userID;
+@property (readonly, strong, nonatomic) NSString *bio;
+@property (readonly, strong, nonatomic) NSString *fullName;
+@property (readonly, strong, nonatomic) NSURL *pictureURL;
+@property (readonly, strong, nonatomic) NSURL *websiteURL;
+@property (readonly, strong, nonatomic) NSNumber *postsCount;
+@property (readonly, strong, nonatomic) NSNumber *followersCount;
+@property (readonly, strong, nonatomic) NSNumber *followingCount;
+@property (readonly, strong, nonatomic) NSArray *postsByUser; //of PMPosts
 
 - (instancetype)initWithInfo:(NSDictionary *)info;
 - (void)addPosts:(NSArray *)array;

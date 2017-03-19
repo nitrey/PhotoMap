@@ -19,7 +19,6 @@
 }
 
 - (NSArray *)dataArray {
-    
     if (_dataArray == nil) {
         _dataArray = [NSArray array];
     }

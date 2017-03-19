@@ -25,8 +25,8 @@ static CLLocationDegrees dafaultLongitude = 30.368853;
 
 @interface PMPost ()
 
-@property (nonatomic, strong) NSString *userPhotoURLString;
-@property (nonatomic, strong) NSString *postPhotoURLString;
+@property (strong, nonatomic) NSString *userPhotoURLString;
+@property (strong, nonatomic) NSString *postPhotoURLString;
 
 @end
 
