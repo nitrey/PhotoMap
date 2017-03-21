@@ -14,7 +14,7 @@
 
 @property (strong, nonatomic) PMUser *user;
 @optional
-- (NSArray *)objectsForAnnotations;
+- (NSArray *)objectsForAnnotations; //of id <MKAnnotation>
 
 @end
 

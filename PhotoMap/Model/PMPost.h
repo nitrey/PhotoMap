@@ -19,6 +19,7 @@
 @property (readonly, strong, nonatomic) NSString *nickname;
 @property (readonly, strong, nonatomic) NSString *location;
 @property (readonly, strong, nonatomic) NSURL *postPhotoURL;
+@property (readonly, strong, nonatomic) NSURL *postPhotoThumbnailURL;
 @property (readonly, assign, nonatomic) NSUInteger likesCount;
 @property (readonly, assign, nonatomic) NSUInteger commentsCount;
 @property (readonly, strong, nonatomic) NSString *postDescription;
@@ -28,6 +29,7 @@
 @property (readonly, assign, nonatomic) CLLocationDegrees longitude;
 @property (strong, nonatomic) UIImage *userPhotoImage;
 @property (strong, nonatomic) UIImage *postPhotoImage;
+@property (strong, nonatomic) UIImage *postPhotoThumbnailImage;
 
 - (instancetype)initWithPostInfo:(NSDictionary *)postInfo;
 

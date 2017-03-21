@@ -5,23 +5,32 @@
 //  Created by Александр on 21.12.16.
 //  Copyright © 2016 Alejandro. All rights reserved.
 //
+
 #import "PMServerManager.h"
-#import <AFNetworking/AFNetworking.h>
+
+//API
+#import "PMAccessToken.h"
+#import "InstagramAPI.h"
 
 //model
-#import "PMAccessToken.h"
 #import "PMUser.h"
 
-//VCS
-#import "PMLoginViewController.h"
+//VCs
+#import "PMLogoutViewController.h"
 
-static NSString * const kAcessTokenNumber = @"access_token_key";
-static NSString * const kInstagramAuthorizePath = @"https://api.instagram.com/v1/oauth/authorize/";
-static NSString * const kInstagramReceiveAccessTokenPath = @"https://api.instagram.com/oauth/access_token";
+//helpers
+#import "AAUtils.h"
+#import <AFNetworking/AFNetworking.h>
+
+NSString * const NewUserNotificationName = @"com.nitrey.NewUserNotificationName";
+static NSString * const kAccessTokenNumber = @"access_token_key";
 static NSString * const kCurrentUserInfoGetRequestFormat = @"https://api.instagram.com/v1/users/self?access_token=%@";
 static NSString * const kCustomUserInfoGetRequestFormat = @"https://api.instagram.com/v1/%@?access_token=%@";
 
 @interface PMServerManager ()
+
+@property (readwrite, strong, nonatomic) PMUser *currentUser;
+@property (readwrite, strong, nonatomic) PMAccessToken *token;
 
 @end
 
@@ -30,14 +39,11 @@ static NSString * const kCustomUserInfoGetRequestFormat = @"https://api.instagra
 @synthesize token = _token;
 
 + (PMServerManager *)sharedManager {
-    
     static PMServerManager *manager = nil;
-    
-    static dispatch_once_t onceToken;
+        static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [[PMServerManager alloc] init];
     });
-    
     return manager;
 }
 
@@ -45,30 +51,44 @@ static NSString * const kCustomUserInfoGetRequestFormat = @"https://api.instagra
 {
     self = [super init];
     if (self) {
-        
         NSURL *baseURL = [NSURL URLWithString:@""];
-        self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
+        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
         [self.sessionManager setResponseSerializer:[AFJSONResponseSerializer serializer]];
         [self.sessionManager setRequestSerializer:[AFJSONRequestSerializer serializer]];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(userDidLogout)
+                                                     name:LogoutSuccessNotificationName
+                                                   object:nil];
     }
     return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)userDidLogout {
+    self.currentUser = nil;
+    self.token = nil;
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:kAccessTokenNumber];
+    [userDefaults synchronize];
 }
 
 - (void)setToken:(PMAccessToken *)token {
     _token = token;
     if (token.number) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setValue:token.number forKey:kAcessTokenNumber];
+        [userDefaults setValue:token.number forKey:kAccessTokenNumber];
         [userDefaults synchronize];
     }
-    AALog([NSString stringWithFormat:@"ACCESS TOKEN RECEIVED: %@", token.number]);
+    AALog(@"ACCESS TOKEN RECEIVED: %@", token.number);
 }
 
 - (PMAccessToken *)token {
-    
     if (!_token) {
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *number = [userDefaults valueForKey:kAcessTokenNumber];
+        NSString *number = [userDefaults valueForKey:kAccessTokenNumber];
         PMAccessToken *token = nil;
         if (number) {
             token = [[PMAccessToken alloc] initWithNumber:number];
@@ -78,18 +98,20 @@ static NSString * const kCustomUserInfoGetRequestFormat = @"https://api.instagra
     return _token;
 }
 
-- (void)setUser:(PMUser *)user {
-    if (![_currentUser.username isEqualToString:user.username]) {
-        AALog(@"New user! Username = %@", user.username);
-        _currentUser = user;
+
+- (void)setCurrentUser:(PMUser *)currentUser {
+    if (![_currentUser.username isEqualToString:currentUser.username]) {
+        _currentUser = currentUser;
+        if (currentUser != nil) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:NewUserNotificationName object:nil];
+        }
     }
 }
 
 - (void)authorizeUser:(void(^)(PMUser *user))completion {
-    
     NSDictionary *parameters = @{
-         @"client_id": INSTAGRAM_CLIENT_ID,
-         @"redirect_uri": INSTAGRAM_REDIRECT_URI,
+         @"client_id": kInstagramClientID,
+         @"redirect_uri": kInstagramRedirectURI,
          @"response_type": @"token",
     };
     [self.sessionManager GET:kInstagramAuthorizePath
@@ -104,14 +126,13 @@ static NSString * const kCustomUserInfoGetRequestFormat = @"https://api.instagra
 }
 
 - (void)getAccessTokenWithCode:(NSString *)code
-                     onSuccess:(authenticationSuccessBlock)success
+                     onSuccess:(void(^)(void))success
                      onFailure:(ErrorBlock)failure {
-    
     NSDictionary *parameters = @{
-         @"client_id": INSTAGRAM_CLIENT_ID,
-         @"client_secret": INSTAGRAM_CLIENT_SECRET,
+         @"client_id": kInstagramClientID,
+         @"client_secret": kInstagramClientSecret,
          @"grant_type": @"authorization_code",
-         @"redirect_uri": INSTAGRAM_REDIRECT_URI,
+         @"redirect_uri": kInstagramRedirectURI,
          @"code": code,
     };
     NSMutableArray *params = [NSMutableArray array];
@@ -125,9 +146,9 @@ static NSString * const kCustomUserInfoGetRequestFormat = @"https://api.instagra
     NSString *urlString = kInstagramReceiveAccessTokenPath;
     
     NSMutableURLRequest *request = [self.sessionManager.requestSerializer requestWithMethod:@"POST"
-                                                   URLString:urlString
-                                                  parameters:nil
-                                                       error:nil];
+                                                                                  URLString:urlString
+                                                                                 parameters:nil
+                                                                                      error:nil];
     [request setHTTPBody: [paramString dataUsingEncoding:NSUTF8StringEncoding]];
     
     __block NSURLSessionDataTask *task =
@@ -135,12 +156,13 @@ static NSString * const kCustomUserInfoGetRequestFormat = @"https://api.instagra
                                completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
                                     if (error) {
                                         AALog(@"ERROR: %@", [error userInfo]);
+                                        failure(error);
                                     } else {
-                                        AALog(@"RESPONSE OBJECT: %@", [responseObject description]);
-                                        NSString *accessTokenNumber = [responseObject objectForKey:@"access_token"];
+                                        AALog(@"RESPONSE OBJECT: %@", [responseObject description ]);
+                                        NSString *accessTokenNumber = responseObject[@"access_token"];
                                         self.token = [[PMAccessToken alloc] initWithNumber:accessTokenNumber];
                                         self.currentUser = [[PMUser alloc] initWithInfo:responseObject[@"user"]];
-                                        success(self.currentUser, self.token);
+                                        success();
                                     }
                                     [task cancel];
                                 }];
@@ -149,46 +171,29 @@ static NSString * const kCustomUserInfoGetRequestFormat = @"https://api.instagra
 
 - (void)getCurrentUserInfoOnSuccess:(GetSuccessBlock)success
                           onFailure:(ErrorBlock)failure {
-    
-    NSString *requestString = [NSString stringWithFormat:kCurrentUserInfoGetRequestFormat, self.token.number];
-    
+    NSString *requestString = [NSString stringWithFormat:@"https://api.instagram.com/v1/users/self?access_token=%@", self.token.number];
+    __weak typeof(self) weakSelf = self;
     [self.sessionManager GET:requestString
-                  parameters:nil
-                    progress:nil
-                     success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                         
-                         AALog(@"CURRENT USER INFO:\n%@", [responseObject description]);
-                         success(responseObject);
-                         
-                     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                         
-                         AALog(@"%@", [error userInfo]);
-                         failure(error);
-                     }];
+                                parameters:nil
+                                  progress:nil
+                                   success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                       
+                                       if (!weakSelf.currentUser) {
+                                           PMUser *user = [[PMUser alloc] initWithInfo:responseObject[@"data"]];
+                                           weakSelf.currentUser = user;
+                                       } else {
+                                           PMUser *user = [weakSelf.currentUser updateUserInfo:responseObject[@"data"]];
+                                           weakSelf.currentUser = user;
+                                       }
+                                       success(responseObject);
+                                   }
+                                   failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                       failure(error);
+                                   }];
 }
 
-- (void)getUserInfo:(NSString *)userID
-          onSuccess:(GetSuccessBlock)success
-          onFailure:(ErrorBlock)failure {
-    
-    NSString *requestString = [NSString stringWithFormat:kCustomUserInfoGetRequestFormat, userID, self.token.number];
-    
-    [self.sessionManager GET:requestString
-                  parameters:nil
-                    progress:nil
-                     success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                         
-                         success(responseObject);
-                         
-                     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                         
-                         AALog(@"%@", [error userInfo]);
-                         failure(error);
-                     }];
-}
-
-- (void)getCurrentUsersRecentMediaCount:(NSNumber *)count
-                                  minID:(NSNumber *)minID
+- (void)getCurrentUserRecentMediaCount:(NSNumber *)count
+                                  minID:(NSString *)minID
                                   maxID:(NSString *)maxID
                               onSuccess:(GetSuccessBlock)success
                               onFailure:(ErrorBlock)failure {
@@ -208,57 +213,6 @@ static NSString * const kCustomUserInfoGetRequestFormat = @"https://api.instagra
                     progress:nil
                      success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                          
-                         AALog(@"CURRENT USER INFO:\n%@", [responseObject description]);
-                         success(responseObject);
-                     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                         AALog(@"%@", [error userInfo]);
-                         failure(error);
-                     }];
-}
-
-- (void)getUsersLikedMediaCount:(NSString *)count
-                          maxID:(NSString *)maxID
-                      onSuccess:(GetSuccessBlock)success
-                      onFailure:(ErrorBlock)failure{
-    
-    NSString *requestString = [NSString stringWithFormat:@"https://api.instagram.com/v1/users/self/media/liked?"
-                               "access_token=%@&"
-                               "max_like_id=%@&"
-                               "count=%@",
-                               self.token.number,
-                               maxID,
-                               count];
-    
-    [self.sessionManager GET:requestString
-                  parameters:nil
-                    progress:nil
-                     success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                         AALog(@"USER'S LIKED MEDIA:\n%@", [responseObject description]);
-                     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                         AALog(@"%@", [error userInfo]);
-                     }];
-}
-
-- (void)getUsersRecentMedia:(NSString *)userID
-                      Count:(NSInteger)count
-                      minID:(NSInteger)minID
-                      maxID:(NSInteger)maxID
-                  onSuccess:(GetSuccessBlock)success
-                  onFailure:(ErrorBlock)failure {
-    
-    NSDictionary *parameters = @{
-                                 @"access_token" : self.token.number,
-                                 @"count" : @(count),
-                                 @"min_id" : @(minID),
-                                 @"max_id" : @(maxID),
-                                 };
-    
-    NSString *requestEndpoint = [NSString stringWithFormat:@"/users/%@/media/recent", userID];
-    
-    [self.sessionManager GET:requestEndpoint
-                  parameters:parameters
-                    progress:nil
-                     success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                          AALog(@"CURRENT USER INFO:\n%@", [responseObject description]);
                          success(responseObject);
                      } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

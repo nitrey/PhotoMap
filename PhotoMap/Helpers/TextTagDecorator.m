@@ -7,7 +7,6 @@
 //
 
 #import "TextTagDecorator.h"
-#import <UIKit/UIKit.h>
 
 @implementation TextTagDecorator
 
@@ -20,8 +19,10 @@
     return decorator;
 }
 
-- (NSAttributedString *)decorateTagsInText:(NSString *)inputString {
-    
+- (NSAttributedString *)decorateTagsInText:(NSString *)inputString fontSize:(CGFloat)fontSize {
+    if (!inputString || [inputString isKindOfClass:[NSNull class]]) {
+        return nil;
+    }
     NSError *error = nil;
     NSRegularExpression *tagsRegExpression = [NSRegularExpression regularExpressionWithPattern:@"#(\\w+)"
                                                                                        options:0
@@ -43,8 +44,8 @@
         NSRange wordRange = [match rangeAtIndex:0];
         UIColor *tagsColor = [UIColor blueColor];
         [attributedString addAttribute:NSForegroundColorAttributeName value:tagsColor range:wordRange];
-        [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:wordRange];
     }
+    [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:NSMakeRange(0, stringLength)];
     return [attributedString copy];
 }
 

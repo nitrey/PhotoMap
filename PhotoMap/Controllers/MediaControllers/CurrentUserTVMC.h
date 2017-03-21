@@ -1,13 +1,13 @@
 //
-//  LikedMediaVC.h
+//  CurrentUserMediaVC.h
 //  PhotoMap
 //
 //  Created by Александр on 05.02.17.
 //  Copyright © 2017 Alejandro. All rights reserved.
 //
 
-#import "PostsTableVC.h"
+#import "TableViewMediaController.h"
 
-@interface LikedMediaVC : PostsTableVC
+@interface CurrentUserTVMC : TableViewMediaController
 
 @end

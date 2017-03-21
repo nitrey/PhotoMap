@@ -10,11 +10,18 @@
 #import <MapKit/MapKit.h>
 #import "MapViewController.h"
 
-@class PMUser;
+@class PMUser, PMPost;
 
-@interface MapViewDDM : NSObject <MapAnnotationsDataSource, MKMapViewDelegate>
+@protocol MapViewDDMDelegate <NSObject>
+
+- (void)needsShowPost:(PMPost *)post;
+
+@end
+
+@interface MapViewDDM : NSObject <MKMapViewDelegate, MapAnnotationsDataSource>
 
 @property (strong, nonatomic) PMUser *user;
+@property (weak, nonatomic) id <MapViewDDMDelegate> delegate;
 
 - (instancetype)initWithUser:(PMUser *)user;
 

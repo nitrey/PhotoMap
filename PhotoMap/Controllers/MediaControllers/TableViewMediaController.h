@@ -6,12 +6,12 @@
 //  Copyright © 2017 Alejandro. All rights reserved.
 //
 
-#import "AbstractPostsViewController.h"
+#import "MediaViewController.h"
 #import "TableViewDDM.h"
 
 typedef void(^requestCompletionBlock)(NSDictionary *resultInfo);
 
-@interface PostsTableVC : AbstractPostsViewController
+@interface TableViewMediaController : MediaViewController
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) TableViewDDM *dataManager;

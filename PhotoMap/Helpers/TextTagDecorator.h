@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface TextTagDecorator : NSObject
 
 + (instancetype)sharedDecorator;
-- (NSAttributedString *)decorateTagsInText:(NSString *)inputString;
+- (NSAttributedString *)decorateTagsInText:(NSString *)inputString fontSize:(CGFloat)fontSize;
 
 @end

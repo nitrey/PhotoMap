@@ -18,14 +18,12 @@
 @implementation PostHeaderCell
 
 - (void)setNickname:(NSString *)nickname andLocation:(NSString *)location {
-    
     self.nicknameLabel.text = nickname;
     self.locationLabel.text = location ? location : @"";
 }
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    
     self.cellType = PostCellHeader;
     self.posterImageView.layer.cornerRadius = CGRectGetWidth(self.posterImageView.bounds) / 2.0;
     self.posterImageView.clipsToBounds = YES;

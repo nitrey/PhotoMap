@@ -6,11 +6,11 @@
 //  Copyright © 2017 Alejandro. All rights reserved.
 //
 
-#import "AbstractPostsViewController.h"
+#import "MediaViewController.h"
 #import "PMServerManager.h"
 #import "PostMappingOperation.h"
 
-@implementation AbstractPostsViewController
+@implementation MediaViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -20,6 +20,7 @@
 - (void)setupAbstractPostsViewController {
     self.serverManager = [PMServerManager sharedManager];
     self.queue = [[NSOperationQueue alloc] init];
+    self.user = self.serverManager.currentUser;
 }
 
 #pragma mark - API

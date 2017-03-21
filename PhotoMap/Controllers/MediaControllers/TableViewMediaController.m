@@ -6,7 +6,7 @@
 //  Copyright © 2017 Alejandro. All rights reserved.
 //
 
-#import "PostsTableVC.h"
+#import "TableViewMediaController.h"
 
 //model
 #import "PMPost.h"
@@ -20,15 +20,16 @@
 #import "PMServerManager.h"
 #import "UIView+SuperCell.h"
 
-@interface PostsTableVC () <TableViewDDMDelegate>
+@interface TableViewMediaController () <TableViewDDMDelegate>
 
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 @property (strong, nonatomic) NSString *nextMaxID;
 @property (assign, nonatomic) CGPoint lastContentOffset;
+@property (assign, nonatomic) BOOL reloadingTableView;
 
 @end
 
-@implementation PostsTableVC
+@implementation TableViewMediaController
 
 @synthesize user = _user;
 
@@ -41,31 +42,9 @@ static CGFloat kActivityIndicatorOffsetY = -20.0;
 }
 
 - (void)setupPostsTableVC {
-    
-    self.dataManager = [[TableViewDDM alloc] init];
-    self.dataManager.delegate = self;
-    
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.delegate = self.dataManager;
-    self.tableView.dataSource = self.dataManager;
-    
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    refreshControl.backgroundColor = [UIColor whiteColor];
-    refreshControl.tintColor = [UIColor lightGrayColor];
-    [refreshControl addTarget:self
-                       action:@selector(reloadPostsInfo)
-             forControlEvents:UIControlEventValueChanged];
-    self.tableView.refreshControl = refreshControl;
-    
-    self.activityIndicator = [[UIActivityIndicatorView alloc] init];
-    self.activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
-    self.activityIndicator.color = [UIColor lightGrayColor];
-    self.activityIndicator.hidesWhenStopped = YES;
-    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:self.activityIndicator];
-    [[self.activityIndicator.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor] setActive:YES];
-    [[self.activityIndicator.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor constant:kActivityIndicatorOffsetY] setActive:YES];
-    [self.activityIndicator startAnimating];
+    [self setupTableView];
+    [self setupActivityIndicator];
+    [self setupDataManager];
     self.lastContentOffset = CGPointZero;
 }
 
@@ -76,18 +55,47 @@ static CGFloat kActivityIndicatorOffsetY = -20.0;
     }
 }
 
+- (void)setupDataManager {
+    self.dataManager = [[TableViewDDM alloc] init];
+    self.dataManager.delegate = self;
+    self.tableView.delegate = self.dataManager;
+    self.tableView.dataSource = self.dataManager;
+}
+
+- (void)setupTableView {
+    self.reloadingTableView = NO;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.backgroundColor = [UIColor whiteColor];
+    refreshControl.tintColor = [UIColor lightGrayColor];
+    [refreshControl addTarget:self
+                       action:@selector(reloadPostsInfo)
+             forControlEvents:UIControlEventValueChanged];
+    self.tableView.refreshControl = refreshControl;
+}
+
+- (void)setupActivityIndicator {
+    self.activityIndicator = [[UIActivityIndicatorView alloc] init];
+    self.activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
+    self.activityIndicator.color = [UIColor lightGrayColor];
+    self.activityIndicator.hidesWhenStopped = YES;
+    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.activityIndicator];
+    [[self.activityIndicator.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor] setActive:YES];
+    [[self.activityIndicator.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor constant:kActivityIndicatorOffsetY] setActive:YES];
+    [self.activityIndicator startAnimating];
+}
+
 #pragma mark - Actions
 
 - (void)reloadPostsInfo {
-    
-    self.dataManager.dataArray = [NSMutableArray array];
+    self.reloadingTableView = YES;
     self.lastContentOffset = CGPointZero;
     self.nextMaxID = @"0";
     [self getMedia];
 }
 
 - (IBAction)actionShowComments:(UIButton *)sender {
-    
     if ([[sender titleForState:UIControlStateNormal] isEqualToString:@"No comments"]) {
         return;
     }
@@ -108,8 +116,8 @@ static CGFloat kActivityIndicatorOffsetY = -20.0;
 }
 
 - (void)updateDataManagerWithArray:(NSArray *)array {
-    
-    NSMutableArray *newArray = [NSMutableArray arrayWithArray:self.dataManager.dataArray];
+    NSArray *initialArray = self.reloadingTableView ? nil : self.dataManager.dataArray;
+    NSMutableArray *newArray = [NSMutableArray arrayWithArray:initialArray];
     NSUInteger objIndex = [self.dataManager.dataArray count];
     NSMutableIndexSet *indexSet = [NSMutableIndexSet indexSet];
     for (PMPost *post in array) {
@@ -136,7 +144,6 @@ static CGFloat kActivityIndicatorOffsetY = -20.0;
 #pragma mark - <DDMDelegate>
 
 - (void)needsShowPost:(PMPost *)post ddm:(TableViewDDM *)ddm {
-    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     SinglePostVC *vc = [storyboard instantiateViewControllerWithIdentifier:@"SinglePostVC"];
     vc.post = post;
@@ -144,17 +151,14 @@ static CGFloat kActivityIndicatorOffsetY = -20.0;
 }
 
 - (void)needsReloadTableView:(DataDisplayManager *)ddm {
-    
     [self performSelectorOnMainThread:@selector(reloadData) withObject:self.tableView waitUntilDone:NO];
 }
 
 - (void)ddmDidScrollToBottom:(DataDisplayManager *)ddm {
-    
     [self getMedia];
 }
 
 - (void)ddmWillStopScrolling:(DataDisplayManager *)ddm targetContentOffset:(CGPoint)targetOffset {
-    
     self.lastContentOffset = targetOffset;
 }
 

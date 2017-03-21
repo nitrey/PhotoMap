@@ -17,12 +17,14 @@
 
 @implementation CommentCell
 
+CGFloat cellCommentFontSize = 15.0;
+
 - (void)configureWithComment:(PMComment *)comment {
     
     self.userImageView.layer.cornerRadius = self.userImageView.bounds.size.width / 2.0;
     NSAttributedString *usernameText = [self boldStringFromString:comment.username];
     NSAttributedString *separatorString = [[NSAttributedString alloc] initWithString:@" "];
-    NSAttributedString *commentText = [[TextTagDecorator sharedDecorator] decorateTagsInText:comment.text];
+    NSAttributedString *commentText = [[TextTagDecorator sharedDecorator] decorateTagsInText:comment.text fontSize:cellCommentFontSize];
     NSMutableAttributedString *resultText = [[NSMutableAttributedString alloc] init];
     [resultText appendAttributedString:usernameText];
     [resultText appendAttributedString:separatorString];
@@ -32,13 +34,7 @@
     if (comment.userPhotoURL) {
         [[PMImageDownloader sharedDownloader] downloadImage:comment.userPhotoURL
                                                  completion:^(UIImage *image) {
-                                                     if ([NSThread isMainThread]) {
-                                                         self.userImageView.image = image;
-                                                     } else {
-                                                         dispatch_async(dispatch_get_main_queue(), ^{
-                                                             self.userImageView.image = image;
-                                                         });
-                                                     }
+                                                     self.userImageView.image = image;
                                                  }];
     }
 }
@@ -53,7 +49,7 @@
                                     
 - (NSAttributedString *)boldStringFromString:(NSString *)string {
     NSMutableAttributedString *resultString = [[NSMutableAttributedString alloc] initWithString:string];
-    UIFont *font = [UIFont boldSystemFontOfSize:15.0];
+    UIFont *font = [UIFont boldSystemFontOfSize:cellCommentFontSize];
     [resultString addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, [resultString length])];
     return [resultString copy];
 }

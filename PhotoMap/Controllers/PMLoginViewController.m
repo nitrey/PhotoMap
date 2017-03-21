@@ -7,58 +7,46 @@
 //
 
 #import "PMLoginViewController.h"
+#import "AAUtils.h"
+
+//API
+#import "InstagramAPI.h"
 #import "PMServerManager.h"
+#import "PMAccessToken.h"
 
 //model
 #import "PMUser.h"
-#import "PMAccessToken.h"
 
-typedef NS_ENUM(NSUInteger, AuthenticationType) {
-    AuthenticationTypeCode,
-    AuthenticationTypeToken
-};
+NSString * const LoginSuccessNotificationName = @"com.nitrey.LoginSuccessNotificationName";
+NSString * const LoginErrorNotificationName = @"com.nitrey.LoginErrorNotificationName";
 
 @interface PMLoginViewController () <UIWebViewDelegate>
 
 @property (strong, nonatomic) UIWebView *webView;
-@property (copy, nonatomic) PMLoginCompletionBlock completionBlock;
 
 @end
 
 @implementation PMLoginViewController
 
-- (instancetype)initWithCompletionBlock:(PMLoginCompletionBlock)completionBlock {
-    
-    self = [super init];
-    if (self) {
-        _completionBlock = completionBlock;
-    }
-    return self;
-}
-
-- (instancetype)init
-{
-    //designated initializer should be used instead
-    return nil;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setupPMLoginViewController];
+    [self runUserAuthorization];
+}
+
+- (void)setupPMLoginViewController {
     self.navigationItem.title = @"Login";
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc]
                                      initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                          target:self
-                                                          action:@selector(actionCancel:)];
+                                     target:self
+                                     action:@selector(actionCancel:)];
     self.navigationItem.rightBarButtonItem = cancelButton;
     
     CGRect rect = self.view.bounds;
     rect.origin = CGPointZero;
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:rect];
-    self.webView = webView;
+    self.webView = [[UIWebView alloc] initWithFrame:rect];
     self.webView.delegate = self;
     [self.view addSubview:self.webView];
-    //[self runAuthenticationWithType:AuthenticationTypeToken];
-    [self runAuthenticationWithType:AuthenticationTypeCode];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -71,20 +59,14 @@ typedef NS_ENUM(NSUInteger, AuthenticationType) {
 
 #pragma mark - Authentication
 
-- (void)runAuthenticationWithType:(AuthenticationType)type {
-    NSString *authenticationType;
-    if (type == AuthenticationTypeCode) {
-        authenticationType = @"code";
-    } else if (type == AuthenticationTypeToken) {
-        authenticationType = @"token";
-    }
+- (void)runUserAuthorization {
     NSString *urlString = [NSString stringWithFormat:@"https://api.instagram.com/oauth/authorize/"
                            "?client_id=%@&"
                            "redirect_uri=%@&"
                            "response_type=%@",
-                           INSTAGRAM_CLIENT_ID,
-                           INSTAGRAM_REDIRECT_URI,
-                           authenticationType];
+                           kInstagramClientID,
+                           kInstagramRedirectURI,
+                           @"code"];
     
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -94,7 +76,6 @@ typedef NS_ENUM(NSUInteger, AuthenticationType) {
 #pragma mark - Actions
 
 - (void)actionCancel:(UIBarButtonItem *)sender {
-    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -103,25 +84,18 @@ typedef NS_ENUM(NSUInteger, AuthenticationType) {
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
     NSString *requestURLString = [[request URL] absoluteString];
-    NSRange tokenSearchRange = [requestURLString rangeOfString:@"access_token="];
-    if (tokenSearchRange.location != NSNotFound) {
-        
-        NSString *accessTokenNumber = [requestURLString substringFromIndex:tokenSearchRange.location + tokenSearchRange.length];
-        PMAccessToken *accessToken = [[PMAccessToken alloc] initWithNumber:accessTokenNumber];
-        self.completionBlock(accessToken, nil);
-        [self actionCancel:nil];
-        return NO;
-    }
     NSRange codeSearchRange = [requestURLString rangeOfString:@"code="];
     if (codeSearchRange.location != NSNotFound) {
-        
         NSString *code = [requestURLString substringFromIndex:codeSearchRange.location + codeSearchRange.length];
+        __weak typeof(self) weakSelf = self;
         [[PMServerManager sharedManager] getAccessTokenWithCode:code
-                                                      onSuccess:^(PMUser *user, PMAccessToken *token) {
-                                                          self.completionBlock(token, user);
-                                                          [self actionCancel:nil];
+                                                      onSuccess:^{
+                                                          [[NSNotificationCenter defaultCenter] postNotificationName:LoginSuccessNotificationName object:nil];
+                                                          [weakSelf actionCancel:nil];
                                                       } onFailure:^(NSError *error) {
-                                                          NSLog(@"ERROR: %@", [error userInfo]);
+                                                          AALog(@"ERROR: %@", [error userInfo]);
+                                                          [[NSNotificationCenter defaultCenter] postNotificationName:LoginErrorNotificationName object:nil];
+                                                          [weakSelf actionCancel:nil];
                                                       }];
         return NO;
     }

@@ -10,7 +10,7 @@
 
 @class PMServerManager, PMUser;
 
-@interface AbstractPostsViewController : UIViewController
+@interface MediaViewController : UIViewController
 
 @property (strong, nonatomic) PMServerManager *serverManager;
 @property (strong, nonatomic) NSOperationQueue *queue;
