@@ -13,5 +13,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *bodyView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (strong, nonatomic) NSURL *postPhotoURL;
 
 @end

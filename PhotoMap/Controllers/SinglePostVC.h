@@ -6,7 +6,7 @@
 //  Copyright © 2017 Alejandro. All rights reserved.
 //
 
-#import "ViewController.h"
+#import <UIKit/UIKit.h>
 
 @class PMUser, PMPost;
 

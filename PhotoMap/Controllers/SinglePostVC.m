@@ -40,6 +40,8 @@ static NSString * const kCommentsButtonFormat = @"%lu comments";
 
 @implementation SinglePostVC
 
+CGFloat descriptionFontSize = 15.0;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
@@ -59,7 +61,7 @@ static NSString * const kCommentsButtonFormat = @"%lu comments";
         self.likesLabel.text = [NSString stringWithFormat:kLikesLabelFormat, (unsigned long)self.post.likesCount];
         [self.commentsButton setTitle:[NSString stringWithFormat:kCommentsButtonFormat, (unsigned long)self.post.commentsCount]
                              forState:UIControlStateNormal];
-        self.photoDescriptionLabel.attributedText = [[TextTagDecorator sharedDecorator] decorateTagsInText:self.post.postDescription];
+        self.photoDescriptionLabel.attributedText = [[TextTagDecorator sharedDecorator] decorateTagsInText:self.post.postDescription fontSize:descriptionFontSize];
         
         if (self.post.userPhotoImage) {
             self.userImageView.image = [post userPhotoImage];
@@ -84,7 +86,9 @@ static NSString * const kCommentsButtonFormat = @"%lu comments";
 #pragma mark - Actions
 
 - (IBAction)actionShowComments:(UIButton *)sender {
-    
+    if ([[sender titleForState:UIControlStateNormal] isEqualToString:@"0 comments"]) {
+        return;
+    }
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main"
                                                          bundle:[NSBundle mainBundle]];
     CommentsVC *vc = [storyboard instantiateViewControllerWithIdentifier:@"CommentsVC"];

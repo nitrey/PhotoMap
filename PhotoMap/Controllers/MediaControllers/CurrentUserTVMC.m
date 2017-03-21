@@ -6,16 +6,17 @@
 //  Copyright © 2017 Alejandro. All rights reserved.
 //
 
-#import "CurrentUserMediaVC.h"
+#import "CurrentUserTVMC.h"
 #import "PMServerManager.h"
+#import "AAUtils.h"
 
-@interface CurrentUserMediaVC ()
+@interface CurrentUserTVMC ()
 
 @property (strong, nonatomic) NSString *nextMaxID;
 
 @end
 
-@implementation CurrentUserMediaVC
+@implementation CurrentUserTVMC
 
 static NSInteger POSTS_IN_REQUEST = 20;
 static NSString * kNextMaxIDKeyPath = @"pagination.next_max_id";
@@ -25,10 +26,9 @@ static NSString * kNextMaxIDKeyPath = @"pagination.next_max_id";
 }
 
 - (void)getMedia {
-    
-    __weak CurrentUserMediaVC *weakSelf = self;
-    [self.serverManager getCurrentUsersRecentMediaCount:@(POSTS_IN_REQUEST)
-                                                               minID:@0
+    __weak CurrentUserTVMC *weakSelf = self;
+    [self.serverManager getCurrentUserRecentMediaCount:@(POSTS_IN_REQUEST)
+                                                               minID:@"0"
                                                                maxID:self.nextMaxID ? self.nextMaxID : @"0"
                                               onSuccess:^(NSDictionary *responseObject) {
                                                   

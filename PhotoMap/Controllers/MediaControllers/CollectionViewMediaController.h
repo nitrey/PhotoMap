@@ -6,11 +6,11 @@
 //  Copyright © 2017 Alejandro. All rights reserved.
 //
 
-#import "AbstractPostsViewController.h"
+#import "MediaViewController.h"
 #import "CollectionViewDDM.h"
 
 @protocol CollectionViewDDMDelegate;
 
-@interface PostsCollectionVC : AbstractPostsViewController <CollectionViewDDMDelegate>
+@interface CollectionViewMediaController : MediaViewController <CollectionViewDDMDelegate>
 
 @end

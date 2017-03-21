@@ -20,7 +20,6 @@
     return self;
 }
 
-
 - (void)main {
     NSArray *postsInfoArray = self.input[@"data"];
     NSMutableArray *postsArray = [NSMutableArray array];

@@ -19,9 +19,16 @@
 
 //Helpers
 #import "PMImageDownloader.h"
-#import "TextTagDecorator.h"
+#import "AAUtils.h"
 
 static NSString *const commentCellIdentifier = @"CommentCell";
+CGFloat commentFontSize = 15.0;
+CGFloat defaultCellHeight = 44.0;
+CGFloat userImageWidthConstant = 35.0;
+CGFloat leftOffset = 5.0;
+CGFloat rightOffset = 8.0;
+CGFloat trailingOffset = 12.0;
+CGFloat commentCellTopAndBottomOffset = 16.0;
 
 @interface CommentsVC () <UITableViewDelegate, UITableViewDataSource>
 
@@ -34,14 +41,6 @@ static NSString *const commentCellIdentifier = @"CommentCell";
 
 @synthesize dataArray = _dataArray;
 
-CGFloat commentFontSize = 15.0;
-CGFloat defaultCellHeight = 44.0;
-CGFloat userImageWidthConstant = 35.0;
-CGFloat leftOffset = 5.0;
-CGFloat rightOffset = 8.0;
-CGFloat trailingOffset = 12.0;
-CGFloat commentCellTopAndBottomOffset = 16.0;
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setup];
@@ -49,13 +48,11 @@ CGFloat commentCellTopAndBottomOffset = 16.0;
 }
 
 - (void)setDataArray:(NSArray *)dataArray {
-    
     _dataArray = dataArray;
     [self.tableView reloadData];
 }
 
 - (void)setup {
-    
     self.title = @"Comments";
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -65,7 +62,6 @@ CGFloat commentCellTopAndBottomOffset = 16.0;
 #pragma mark - API
 
 - (void)getCommentsInfo {
-    
     [[PMServerManager sharedManager] getCommentsForMedia:self.mediaID
                                                onSuccess:^(NSDictionary *responseObject) {
                                                    NSLog(@"%@", responseObject);
@@ -80,19 +76,18 @@ CGFloat commentCellTopAndBottomOffset = 16.0;
                                                    self.dataArray = [comments copy];
 
                                                } onFailure:^(NSError *error) {
-                                                   NSLog(@"Failure loading comments");
+                                                   AALog(@"Failure loading comments");
+                                                   AALog(@"ERROR: %@", [error userInfo]);
                                                }];
 }
 
 #pragma mark - <UITableViewDataSource>
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     static NSString *commentCellIdentifier = @"CommentCell";
     CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:commentCellIdentifier forIndexPath:indexPath];
     PMComment *comment = self.dataArray[indexPath.row];
     [cell configureWithComment:comment];
-    
     return cell;
 }
 
@@ -107,7 +102,6 @@ CGFloat commentCellTopAndBottomOffset = 16.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     PMComment *comment = self.dataArray[indexPath.row];
     UIFont *font = [UIFont systemFontOfSize:commentFontSize];
     UIFont *boldFont = [UIFont boldSystemFontOfSize:commentFontSize];
@@ -124,7 +118,6 @@ CGFloat commentCellTopAndBottomOffset = 16.0;
     CGRect requiredRect = [resultText boundingRectWithSize:CGSizeMake(labelWidth, MAXFLOAT)
                                              options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                                              context:nil];
-    
     CGFloat requiredHeight = requiredRect.size.height + commentCellTopAndBottomOffset;
     CGFloat result = MAX(defaultCellHeight, requiredHeight);
     AALog(@"%f", result);

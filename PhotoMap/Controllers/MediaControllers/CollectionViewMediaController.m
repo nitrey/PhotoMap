@@ -5,7 +5,8 @@
 //  Created by Александр on 18.02.17.
 //  Copyright © 2017 Alejandro. All rights reserved.
 //
-#import "PostsCollectionVC.h"
+#import "CollectionViewMediaController.h"
+#import "AAUtils.h"
 
 //model
 #import "PMUser.h"
@@ -17,7 +18,10 @@
 //Controllers
 #import "SinglePostVC.h"
 
-@interface PostsCollectionVC ()
+static NSInteger POSTS_IN_REQUEST = 20;
+static NSString * kNextMaxIDKeyPath = @"pagination.next_max_id";
+
+@interface CollectionViewMediaController ()
 
 @property (strong, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) CollectionViewDDM *dataManager;
@@ -26,35 +30,26 @@
 
 @end
 
-@implementation PostsCollectionVC
+@implementation CollectionViewMediaController
 
 @synthesize user = _user;
 
-static NSInteger POSTS_IN_REQUEST = 20;
-static NSString * kNextMaxIDKeyPath = @"pagination.next_max_id";
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.serverManager = [PMServerManager sharedManager];
-    
     [self setupPostsCollectionVC];
     [self getMedia];
 }
 
 - (void)setupPostsCollectionVC {
-    
     self.dataManager = [[CollectionViewDDM alloc] init];
     self.dataManager.delegate = self;
-    
     self.collectionView.dataSource = self.dataManager;
     self.collectionView.delegate = self.dataManager;
-    
     self.queue = [[NSOperationQueue alloc] init];
 }
 
 - (void)reloadPostsInfo {
-    
     self.dataManager.dataArray = [NSMutableArray array];
     self.lastContentOffset = CGPointZero;
     self.nextMaxID = @"0";
@@ -71,11 +66,9 @@ static NSString * kNextMaxIDKeyPath = @"pagination.next_max_id";
 #pragma mark - API
 
 - (void)getMedia {
-    
-    __weak PostsCollectionVC *weakSelf = self;
-    
-    [self.serverManager getCurrentUsersRecentMediaCount:@(POSTS_IN_REQUEST)
-                                                               minID:@0
+    __weak CollectionViewMediaController *weakSelf = self;
+    [self.serverManager getCurrentUserRecentMediaCount:@(POSTS_IN_REQUEST)
+                                                               minID:@"0"
                                                                maxID:self.nextMaxID ? self.nextMaxID : @"0"
                                                            onSuccess:^(NSDictionary *responseObject) {
                                                                
@@ -89,7 +82,6 @@ static NSString * kNextMaxIDKeyPath = @"pagination.next_max_id";
 }
 
 - (void)updateDataManagerWithArray:(NSArray *)array {
-    
     NSMutableArray *newArray = [NSMutableArray arrayWithArray:self.dataManager.dataArray];
     [newArray addObjectsFromArray:array];
     [self.user addPosts:array];
@@ -102,7 +94,6 @@ static NSString * kNextMaxIDKeyPath = @"pagination.next_max_id";
 #pragma mark - <CollectionViewDDMDelegate>
 
 - (void)needsShowPost:(PMPost *)post {
-    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
     SinglePostVC *vc = (SinglePostVC *)[storyboard instantiateViewControllerWithIdentifier:@"SinglePostVC"];
     vc.post = post;

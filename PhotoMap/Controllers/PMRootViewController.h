@@ -10,7 +10,7 @@
 
 @class PMUser;
 
-@interface ViewController : UIViewController
+@interface PMRootViewController : UIViewController
 
 @property (strong, nonatomic, readonly) PMUser *user;
 

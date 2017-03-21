@@ -16,4 +16,8 @@
     return CLLocationCoordinate2DMake(self.latitude, self.longitude);
 }
 
+- (NSString *)title {
+    return [NSString stringWithFormat:@"%lu likes\n%lu comments", self.likesCount, self.commentsCount];
+}
+
 @end

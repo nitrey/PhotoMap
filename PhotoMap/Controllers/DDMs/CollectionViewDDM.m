@@ -40,11 +40,9 @@ static CGFloat interItemSpacing = 1.0;
 #pragma mark - <UICollectionViewDelegateFlowLayout>
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
     CGFloat paddingSpace = sectionInsets.top * (ITEMS_IN_ROW - 1);
     CGFloat availableWidth = collectionView.bounds.size.width - paddingSpace;
     CGFloat unitWidth = availableWidth / ITEMS_IN_ROW;
-    
     return CGSizeMake(unitWidth, unitWidth);
 }
 
@@ -63,7 +61,6 @@ static CGFloat interItemSpacing = 1.0;
 #pragma mark - <UICollectionViewDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     [self.delegate needsShowPost:self.dataArray[indexPath.row]];
 }
@@ -87,19 +84,23 @@ static CGFloat interItemSpacing = 1.0;
     [cell.activityIndicator startAnimating];
     
     PMPost *post = self.dataArray[indexPath.row];
+    cell.postPhotoThumbnailURL = post.postPhotoThumbnailURL;
     
-    if (post.postPhotoImage) {
+    if (post.postPhotoThumbnailImage) {
         [cell.activityIndicator stopAnimating];
-        cell.imageView.image = post.postPhotoImage;
+        cell.imageView.image = post.postPhotoThumbnailImage;
         return cell;
     }
-    [self.imageDownloader downloadImage:[post postPhotoURL] completion:^(UIImage *image) {
+    [self.imageDownloader downloadImage:post.postPhotoThumbnailURL completion:^(UIImage *image) {
         CollectionPhotoCell *updateCell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier
                                                                                     forIndexPath:indexPath];
         if (!updateCell) {
             return;
         }
-        post.postPhotoImage = image;
+        if (![cell.postPhotoThumbnailURL isEqual:post.postPhotoThumbnailURL]) {
+            return;
+        }
+        post.postPhotoThumbnailImage = image;
         [cell.activityIndicator stopAnimating];
         [UIView transitionWithView:cell.imageView
                           duration:0.3

@@ -7,6 +7,7 @@
 //
 
 #import "AAUtils.h"
+#import <UIKit/UIKit.h>
 
 void AALog(NSString *text, ...) {
     

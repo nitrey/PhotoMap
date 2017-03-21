@@ -14,6 +14,7 @@ static NSString * kUserImageURLKeyPath = @"caption.from.profile_picture";
 static NSString * kUsernameKeyPath = @"caption.from.username";
 static NSString * kPhotoLocationKeyPath = @"location.name";
 static NSString * kPostPhotoURLKeyPath = @"images.standard_resolution.url";
+static NSString * kPostPhotoThumbnailURLKeyPath = @"images.thumbnail.url";
 static NSString * kLikesCountKeyPath = @"likes.count";
 static NSString * kCommentsCountKeyPath = @"comments.count";
 static NSString * kPostDescriptionKeyPath = @"caption.text";
@@ -27,6 +28,7 @@ static CLLocationDegrees dafaultLongitude = 30.368853;
 
 @property (strong, nonatomic) NSString *userPhotoURLString;
 @property (strong, nonatomic) NSString *postPhotoURLString;
+@property (strong, nonatomic) NSString *postPhotoThumbnailURLString;
 
 @end
 
@@ -53,6 +55,8 @@ static CLLocationDegrees dafaultLongitude = 30.368853;
         _userPhotoURLString = [userImageURLString isKindOfClass:[NSNull class]] ? nil : userImageURLString;
         NSString *postPhotoURLString = [postInfo valueForKeyPath:kPostPhotoURLKeyPath];
         _postPhotoURLString = [postPhotoURLString isKindOfClass:[NSNull class]] ? nil : postPhotoURLString;
+        NSString *postPhotoThumbnailURLString = [postInfo valueForKeyPath:kPostPhotoThumbnailURLKeyPath];
+        _postPhotoThumbnailURLString = [postPhotoThumbnailURLString isKindOfClass:[NSNull class]] ? nil : postPhotoThumbnailURLString;
     }
     return self;
 }
@@ -63,6 +67,10 @@ static CLLocationDegrees dafaultLongitude = 30.368853;
 
 - (NSURL *)postPhotoURL {
     return [NSURL URLWithString:self.postPhotoURLString];
+}
+
+- (NSURL *)postPhotoThumbnailURL {
+    return [NSURL URLWithString:self.postPhotoThumbnailURLString];
 }
 
 @end

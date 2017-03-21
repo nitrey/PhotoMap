@@ -28,6 +28,9 @@ static NSString * footerCellIdentifier = @"PostFooterCell";
 static NSString * thumbnailPlaceholderName = @"userThumbnailImagePlaceholder";
 static NSString * postPhotoPlaceholderName = @"photoPlaceholder";
 
+CGFloat headerCellHeight = 44.0;
+CGFloat footerCellHeight = 52.0;
+
 @interface TableViewDDM ()
 
 @property (strong, nonatomic) NSOperationQueue *queue;
@@ -37,11 +40,7 @@ static NSString * postPhotoPlaceholderName = @"photoPlaceholder";
 
 @implementation TableViewDDM
 
-CGFloat headerCellHeight = 44.0;
-CGFloat footerCellHeight = 52.0;
-
 - (instancetype)init {
-
     self = [super init];
     if (self != nil) {
         _queue = [[NSOperationQueue alloc] init];
@@ -52,7 +51,6 @@ CGFloat footerCellHeight = 52.0;
 }
 
 - (PMPost *)postAtIndex:(NSInteger)index {
-    
     if (index >= 0 && index <= [self.dataArray count]) {
         return self.dataArray[index];
     } else {
@@ -63,15 +61,11 @@ CGFloat footerCellHeight = 52.0;
 #pragma mark - <UITableViewDataSource>
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     PMPost *post = self.dataArray[indexPath.section];
-    
     if (post == nil) {
         return nil;
     }
-    
     PostCellType cellType = indexPath.row;
-    
     switch (cellType) {
         case PostCellHeader: {
             PostHeaderCell *cell = [tableView dequeueReusableCellWithIdentifier:headerCellIdentifier forIndexPath:indexPath];
@@ -114,7 +108,7 @@ CGFloat footerCellHeight = 52.0;
         __weak PostHeaderCell *weakCell = cell;
         cell.posterImageView.image = [UIImage imageNamed:thumbnailPlaceholderName];
         
-        NSURL *userPhotoURL = [post userPhotoURL];
+        NSURL *userPhotoURL = post.userPhotoURL;
         [self.imageDownloader downloadImage:userPhotoURL
                                  completion:^(UIImage *image) {
                                      
@@ -141,6 +135,7 @@ CGFloat footerCellHeight = 52.0;
     if (post == nil) {
         return nil;
     }
+    cell.postPhotoURL = post.postPhotoURL;
     static UIImage *postPlaceholder;
     if (postPlaceholder == nil) {
         postPlaceholder = [UIImage imageNamed:postPhotoPlaceholderName];
@@ -150,14 +145,11 @@ CGFloat footerCellHeight = 52.0;
         cell.bodyView.image = post.postPhotoImage;
     } else {
         cell.bodyView.image = postPlaceholder;
+        [cell.activityIndicator startAnimating];
         __weak PostBodyCell *weakCell = cell;
         __weak typeof(self) weakSelf = self;
-        NSURL *postPhotoImageURL = [post postPhotoURL];
-        
-        [weakSelf.imageDownloader downloadImage:postPhotoImageURL completion:^(UIImage *image) {
-            
-            PostBodyCell *updateCell = [tableView dequeueReusableCellWithIdentifier:bodyCellIdentifier forIndexPath:indexPath];
-            if (updateCell == nil) {
+        [weakSelf.imageDownloader downloadImage:post.postPhotoURL completion:^(UIImage *image) {
+            if (![cell.postPhotoURL isEqual:post.postPhotoURL]) {
                 return;
             }
             post.postPhotoImage = image;
@@ -218,7 +210,5 @@ CGFloat footerCellHeight = 52.0;
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     [self.delegate ddmWillStopScrolling:self targetContentOffset:*targetContentOffset];
 }
-
-
 
 @end

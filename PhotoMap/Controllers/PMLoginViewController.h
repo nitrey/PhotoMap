@@ -8,12 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@class PMAccessToken, PMUser;
-
-typedef void(^PMLoginCompletionBlock)(PMAccessToken *token, PMUser *user);
+extern NSString * const LoginSuccessNotificationName;
+extern NSString * const LoginErrorNotificationName;
 
 @interface PMLoginViewController : UIViewController
-
-- (instancetype)initWithCompletionBlock:(PMLoginCompletionBlock)completionBlock;
 
 @end

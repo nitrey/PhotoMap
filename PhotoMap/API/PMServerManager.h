@@ -7,53 +7,37 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AAUtils.h"
+
+extern NSString * const NewUserNotificationName;
 
 @class PMAccessToken, PMUser, AFHTTPSessionManager;
 
-typedef void(^authenticationSuccessBlock)(PMUser *user, PMAccessToken *token);
 typedef void(^GetSuccessBlock)(NSDictionary *responseObject);
 typedef void(^ErrorBlock)(NSError *error);
 
 @interface PMServerManager : NSObject
 
-@property (strong, nonatomic) AFHTTPSessionManager *sessionManager;
-@property (strong, nonatomic) PMAccessToken *token;
-@property (strong, nonatomic) PMUser *currentUser;
+@property (readonly, strong, nonatomic) AFHTTPSessionManager *sessionManager;
+@property (readonly, strong, nonatomic) PMAccessToken *token;
+@property (readonly, strong, nonatomic) PMUser *currentUser;
 
 + (PMServerManager *)sharedManager;
 
 - (void)getAccessTokenWithCode:(NSString *)code
-                     onSuccess:(authenticationSuccessBlock)success
+                     onSuccess:(void(^)(void))success
                      onFailure:(ErrorBlock)failure;
 
 - (void)getCurrentUserInfoOnSuccess:(GetSuccessBlock)success
                           onFailure:(ErrorBlock)failure;
 
-- (void)getUserInfo:(NSString *)userID
-          onSuccess:(GetSuccessBlock)success
-          onFailure:(ErrorBlock)failure;
-
-- (void)getCurrentUsersRecentMediaCount:(NSNumber *)count
-                                  minID:(NSNumber *)minID
+- (void)getCurrentUserRecentMediaCount:(NSNumber *)count
+                                  minID:(NSString *)minID
                                   maxID:(NSString *)maxID
                               onSuccess:(GetSuccessBlock)success
                               onFailure:(ErrorBlock)failure;
 
-- (void)getUsersRecentMedia:(NSString *)userID
-                      Count:(NSInteger)count
-                      minID:(NSInteger)minID
-                      maxID:(NSInteger)maxID
-                  onSuccess:(GetSuccessBlock)success
-                  onFailure:(ErrorBlock)failure;
-
 - (void)getCommentsForMedia:(NSString *)mediaID
                   onSuccess:(GetSuccessBlock)success
                   onFailure:(ErrorBlock)failure;
-
-- (void)getUsersLikedMediaCount:(NSString *)count
-                          maxID:(NSString *)maxID
-                      onSuccess:(GetSuccessBlock)success
-                      onFailure:(ErrorBlock)failure;
 
 @end
