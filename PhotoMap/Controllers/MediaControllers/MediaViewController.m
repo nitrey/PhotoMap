@@ -7,8 +7,10 @@
 //
 
 #import "MediaViewController.h"
-#import "PMServerManager.h"
 #import "PostMappingOperation.h"
+
+//helpers
+#import "PMServerManager.h"
 
 @implementation MediaViewController
 
@@ -29,13 +31,7 @@
     //ABSTRACT METHOD, SHOULD BE OVERRIDDEN BY CONCRETE SUBCLASSES
 }
 
-- (void(^)(void))blockUpdatingUI {
-    //ABSTRACT METHOD, SHOULD BE OVERRIDDEN BY CONCRETE SUBCLASSES
-    return nil;
-}
-
 - (void)mapResponseObject:(NSDictionary *)responseObject {
-    
     if (responseObject != nil) {
         PostMappingOperation *mapping = [[PostMappingOperation alloc] initWithDictionary:responseObject];
         

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class PMPost;
+@class PMPost, UIImage;
 
 @interface PMUser : NSObject
 
@@ -18,6 +18,7 @@
 @property (readonly, strong, nonatomic) NSString *fullName;
 @property (readonly, strong, nonatomic) NSURL *pictureURL;
 @property (readonly, strong, nonatomic) NSURL *websiteURL;
+@property (readonly, strong, nonatomic) UIImage *userImage;
 @property (readonly, strong, nonatomic) NSNumber *postsCount;
 @property (readonly, strong, nonatomic) NSNumber *followersCount;
 @property (readonly, strong, nonatomic) NSNumber *followingCount;
@@ -27,5 +28,6 @@
 - (instancetype)updateUserInfo:(NSDictionary *)info;
 - (void)addPosts:(NSArray *)array;
 - (void)addPost:(PMPost *)post;
+- (void)updateUserImage:(UIImage *)image;
 
 @end

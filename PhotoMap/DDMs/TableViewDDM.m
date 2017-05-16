@@ -10,6 +10,7 @@
 
 //model
 #import "PMPost.h"
+#import "PMUser.h"
 
 //cells
 #import "PostHeaderCell.h"
@@ -18,8 +19,7 @@
 
 //helpers
 #import "PMImageDownloader.h"
-
-//helpers
+#import "PMServerManager.h"
 #import "AAUtils.h"
 
 static NSString * headerCellIdentifier = @"PostHeaderCell";
@@ -98,17 +98,14 @@ CGFloat footerCellHeight = 52.0;
 
 - (PostHeaderCell *)configureHeaderCell:(PostHeaderCell *)cell atIndexPath:(NSIndexPath *)indexPath inTableView:(UITableView *)tableView {
     PMPost *post = self.dataArray[indexPath.section];
-    if (post == nil) {
-        return nil;
-    }
-    [cell setNickname:post.nickname andLocation:post.location];
-    if (post.userPhotoImage != nil) {
-        cell.posterImageView.image = post.userPhotoImage;
+    PMUser *user = [PMServerManager sharedManager].currentUser;
+    [cell setNickname:user.username andLocation:post.location];
+    if (user.userImage != nil) {
+        cell.posterImageView.image = user.userImage;
     } else {
         __weak PostHeaderCell *weakCell = cell;
         cell.posterImageView.image = [UIImage imageNamed:thumbnailPlaceholderName];
-        
-        NSURL *userPhotoURL = post.userPhotoURL;
+        NSURL *userPhotoURL = user.pictureURL;
         [self.imageDownloader downloadImage:userPhotoURL
                                  completion:^(UIImage *image) {
                                      
@@ -117,8 +114,7 @@ CGFloat footerCellHeight = 52.0;
                                      if (updateCell == nil) {
                                          return;
                                      }
-                                     post.userPhotoImage = image;
-                                     weakCell.posterImageURL = userPhotoURL;
+                                     [user updateUserImage:image];
                                      [UIView animateWithDuration:0.3
                                                            delay:0.0
                                                          options:UIViewAnimationOptionTransitionCrossDissolve

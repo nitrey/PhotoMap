@@ -6,7 +6,6 @@
 //  Copyright © 2017 Alejandro. All rights reserved.
 //
 #import "CollectionViewMediaController.h"
-#import "AAUtils.h"
 
 //model
 #import "PMUser.h"
@@ -14,6 +13,9 @@
 //API
 #import "PMServerManager.h"
 #import "PostMappingOperation.h"
+
+//helpers
+#import "AAUtils.h"
 
 //Controllers
 #import "SinglePostVC.h"

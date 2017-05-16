@@ -111,7 +111,6 @@ static CGFloat kActivityIndicatorOffsetY = -20.0;
 #pragma mark - API
 
 - (void)getMedia {
-    
     //ABSTRACT METHOD, SHOULD BE OVERRIDDEN BY SUBCLASSES
 }
 

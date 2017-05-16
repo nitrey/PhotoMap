@@ -21,8 +21,8 @@ static NSString * kPostDescriptionKeyPath = @"caption.text";
 static NSString * kPostTagsKeyPath = @"tags";
 static NSString * kPostCoordinateLatitudeKeyPath = @"location.latitude";
 static NSString * kPostCoordinateLongitudeKeyPath = @"location.longitude";
-static CLLocationDegrees defaultLatitude = 59.905809;
-static CLLocationDegrees dafaultLongitude = 30.368853;
+CLLocationDegrees defaultLatitude = 55.75222;
+CLLocationDegrees defaultLongitude = 37.61556;
 
 @interface PMPost ()
 
@@ -50,7 +50,7 @@ static CLLocationDegrees dafaultLongitude = 30.368853;
         id coordinateLatitude = [postInfo valueForKeyPath:kPostCoordinateLatitudeKeyPath];
         _latitude = [coordinateLatitude isKindOfClass:[NSNull class]] ? defaultLatitude : [coordinateLatitude doubleValue];
         id coordinateLongitude = [postInfo valueForKeyPath:kPostCoordinateLongitudeKeyPath];
-        _longitude = [coordinateLongitude isKindOfClass:[NSNull class]] ? dafaultLongitude : [coordinateLongitude doubleValue];
+        _longitude = [coordinateLongitude isKindOfClass:[NSNull class]] ? defaultLongitude : [coordinateLongitude doubleValue];
         NSString *userImageURLString = [postInfo valueForKeyPath:kUserImageURLKeyPath];
         _userPhotoURLString = [userImageURLString isKindOfClass:[NSNull class]] ? nil : userImageURLString;
         NSString *postPhotoURLString = [postInfo valueForKeyPath:kPostPhotoURLKeyPath];

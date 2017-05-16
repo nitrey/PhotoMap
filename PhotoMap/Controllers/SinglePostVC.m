@@ -13,12 +13,13 @@
 #import "PMPost.h"
 
 //API
-#import "PMImageDownloader.h"
+#import "PMServerManager.h"
 
 //Controllers
 #import "CommentsVC.h"
 
 //Helpers
+#import "PMImageDownloader.h"
 #import "AAUtils.h"
 #import "TextTagDecorator.h"
 
@@ -63,12 +64,13 @@ CGFloat descriptionFontSize = 15.0;
                              forState:UIControlStateNormal];
         self.photoDescriptionLabel.attributedText = [[TextTagDecorator sharedDecorator] decorateTagsInText:self.post.postDescription fontSize:descriptionFontSize];
         
-        if (self.post.userPhotoImage) {
-            self.userImageView.image = [post userPhotoImage];
+        PMUser *currentUser = [PMServerManager sharedManager].currentUser;
+        if (currentUser.userImage != nil) {
+            self.userImageView.image = currentUser.userImage;
         } else {
-            [[PMImageDownloader sharedDownloader] downloadImage:[post userPhotoURL] completion:^(UIImage *image) {
+            [[PMImageDownloader sharedDownloader] downloadImage:currentUser.pictureURL completion:^(UIImage *image) {
                 weakSelf.userImageView.image = image;
-                post.userPhotoImage = image;
+                [currentUser updateUserImage:image];
             }];
         }
         

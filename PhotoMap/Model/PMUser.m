@@ -93,4 +93,10 @@ static NSString * kPostsCountKeyPath = @"counts.media";
     _postsByUser = [newArray copy];
 }
 
+#pragma mark - User image
+
+- (void)updateUserImage:(UIImage *)image {
+    _userImage = image;
+}
+
 @end
