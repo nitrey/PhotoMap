@@ -11,7 +11,6 @@
 @implementation PMImageDownloader
 
 + (instancetype)sharedDownloader {
-    
     static PMImageDownloader *downloader = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -21,7 +20,6 @@
 }
 
 - (void)downloadImage:(NSURL *)imageURL completion:(void(^)(UIImage *image))completionBlock {
-    
     NSURLSessionTask *task =
         [[NSURLSession sharedSession] downloadTaskWithURL:imageURL
                                         completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {

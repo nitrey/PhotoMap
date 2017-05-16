@@ -138,6 +138,7 @@ CGFloat headerStackViewHeightConstant = 80.0;
             [self updateCountLabels];
             [[PMImageDownloader sharedDownloader] downloadImage:user.pictureURL completion:^(UIImage *image) {
                 self.userImageView.image = image;
+                [self.serverManager.currentUser updateUserImage:image];
             }];
         } else {
             AALog(@"User logged out");
